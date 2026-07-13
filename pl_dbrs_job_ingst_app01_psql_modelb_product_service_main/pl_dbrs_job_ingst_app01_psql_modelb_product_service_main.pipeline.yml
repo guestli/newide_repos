@@ -1,0 +1,117 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "c0f69117e94e9ebaac45a6c39bd707c4"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "IterateRTMDATA"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 4
+    activities:
+    - name: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_detail"
+      pipelineId: "9d838c23d7f882f0b4d2ec536dc4475f"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        DatabaseName: ""
+        TableName: ""
+        PartitionID: ""
+        LogEnabled: ""
+        IsParentPipelineManualTrigger: ""
+        select_sql: ""
+        SQLFrom: ""
+        SQLWhere: ""
+        pl_name: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_Partition_ID_By_Date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.ManualPartitionID), formatDateTime(adddays(addhours(utcnow(),\
+        \ 8), -1), 'yyyy-MM-dd'), pipeline().parameters.ManualPartitionID)"
+    outputVariables: []
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_job_ingst_ecommerce_main_support_live_sanitized__ls_asql_infra_03"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "SetEndDate"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 43200
+  - name: "SetStartDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "StartDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.StartDate), formatDateTime(addhours(utcnow(),\
+        \ -16), 'yyyy-MM-dd'), pipeline().parameters.StartDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "SetEndDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "EndDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.EndDate),  formatDateTime(addhours(utcnow(),\
+        \ 8), 'yyyy-MM-dd'), pipeline().parameters.EndDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetStartDate"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "LogEnabled"
+    default: "1"
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "table_name"
+    default: ""
+  - name: "StartDate"
+    default: ""
+  - name: "EndDate"
+    default: ""
+  - name: "pl_name"
+    default: ""
+  - name: "ManualPartitionID"
+    default: ""
+  variables:
+  - name: "PartitionID"
+    default: "2019-06-11"
+  - name: "env_storage"
+    default: ""
+  - name: "StartDate"
+    default: ""
+  - name: "EndDate"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

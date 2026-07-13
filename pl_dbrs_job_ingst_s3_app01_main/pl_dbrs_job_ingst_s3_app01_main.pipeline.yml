@@ -1,0 +1,67 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "ee269984584b663a54ff270af3ffff14"
+spec:
+  displayName: "pl_dbrs_job_ingst_s3_app01_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__ls_asql_infra_04"
+    table: "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__ds_asql_conf_environment"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "source2raw"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 5
+    activities:
+    - name: "pl_dbrs_job_ingst_s3_app01_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_job_ingst_s3_app01_detail"
+      pipelineId: "874878e911ad28a5d74570cd4c8f2168"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        TableName: ""
+        PartitionID: ""
+        DatabaseName: ""
+        LogEnabled: ""
+        MainPipelineTriggerType: ""
+        env_storage: ""
+        source_location: ""
+        source_filename: ""
+        source_type: ""
+        pl_name: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "LogEnabled"
+    default: "1"
+  - name: "pt"
+    default: ""
+  - name: "pTableList"
+    default: ""
+  - name: "pl_name"
+    default: ""
+  - name: "env_storage"
+    default: ""
+  - name: "PartitionID"
+    default: ""
+  - name: "MainPipelineTriggerType"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

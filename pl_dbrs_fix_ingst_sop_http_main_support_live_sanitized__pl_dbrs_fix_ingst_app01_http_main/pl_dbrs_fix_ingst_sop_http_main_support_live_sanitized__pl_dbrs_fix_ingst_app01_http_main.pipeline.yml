@@ -1,0 +1,82 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "6cdd516e0991b1b30b2d477a636a5cfb"
+spec:
+  displayName: "pl_dbrs_fix_ingst_sop_http_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_http_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 6 * * ?"
+    priority: "d5"
+  activities:
+  - name: "GetPartitionID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "partition_id"
+    value:
+      rawValue: "@if(equals(pipeline().parameters.PartitionID,'0'),formatDateTime(addhours(utcnow(),8),\
+        \ 'yyyy-MM-dd'),pipeline().parameters.PartitionID)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Env"
+        dependencyConditions:
+        - "succeeded"
+  - name: "IterateEachJob"
+    type: "for_each"
+    items: "@pipeline().parameters.TableName"
+    concurrency: 6
+    activities:
+    - name: "pl_dbrs_fix_ingst_app01_http_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_sop_http_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_http_detail"
+      pipelineId: "30f9b65a9d6a119955050908552a24f5"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        LogEnabled: ""
+        partition_id: ""
+        TableName: ""
+        MainPipelineTriggerType: ""
+        Env: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetPartitionID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Env"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "Env"
+    value:
+      rawValue: "@pipeline().globalParameters.Environment"
+    outputVariables: []
+  parameters:
+  - name: "LogEnabled"
+    default: "1"
+  - name: "TableName"
+    default: "[rw_cust_app01_cbu_wholesale, rw_cust_app01_cbu_wholesale_return, rw_cust_app01_pbp_wholesale,\
+      \ rw_cust_app01_pbp_wholesale_return, rw_dealer_app01_dealer_stock, rw_cust_app01_retail]"
+  - name: "PartitionID"
+    default: "0"
+  variables:
+  - name: "partition_id"
+    default: ""
+  - name: "JobNameVar"
+    default: ""
+  - name: "Env"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

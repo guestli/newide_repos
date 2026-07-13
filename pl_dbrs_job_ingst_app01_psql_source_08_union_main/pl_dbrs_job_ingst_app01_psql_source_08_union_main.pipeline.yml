@@ -1,0 +1,74 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "3024499b2a1ca540baeabf5e39ca0784"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_psql_source_08_union_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_job_dealers_ingst_otrplus_union_main1_support_live_sanitized__ls_asql_infra_03"
+    table: "<<REDACTED>>"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "MYSQL2RAWDATA"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 2
+    activities:
+    - name: "pl_dbrs_job_ingst_app01_psql_source_08_union_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_job_ingst_app01_psql_source_08_union_detail"
+      pipelineId: "a0b75834b04a289390c32446cb122ab2"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        pStartDate: ""
+        pEndDate: ""
+        logEnabled: ""
+        PartitionID: ""
+        pl_name: ""
+        MainPipelineTriggerType: ""
+        DataSourceSQL_FROM: ""
+        DatabaseName: ""
+        DataSourceSQL: ""
+        TableName: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "pStartDate"
+    default: ""
+  - name: "pEndDate"
+    default: ""
+  - name: "logEnabled"
+    default: "1"
+  - name: "pTableList"
+    default: ""
+  - name: "PartitionID"
+    default: ""
+  - name: "pl_name"
+    default: ""
+  - name: "MainPipelineTriggerType"
+    default: ""
+  variables:
+  - name: "SrcDatabaseName"
+    default: ""
+  - name: "SrcTableName"
+    default: ""
+  - name: "source_sql"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

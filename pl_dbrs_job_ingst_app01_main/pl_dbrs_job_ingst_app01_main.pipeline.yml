@@ -1,0 +1,280 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "956d9495aa526580789fd757e617c303"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 15 5 * * ?"
+    priority: "d5"
+  activities:
+  - name: "GetEnv"
+    type: "look_up"
+    dataSource: "pl_dbrs_job_ingst_ecommerce_main_support_live_sanitized__ls_asql_infra_03"
+    table: "pl_dbrs_job_ingst_ecommerce_main_support_live_sanitized__ds_asql_conf_environment"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "SetEnvStorage"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "env_storage"
+    value:
+      rawValue: "@activity('GetEnv').output.firstrow.env_storage"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "GetEnv"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_Partition_ID_By_Date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.partition_date), formatDateTime(adddays(addhours(utcnow(),\
+        \ 8), -1), 'yyyy-MM-dd'), pipeline().parameters.partition_date)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetEnvStorage"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_main"
+    pipelineId: "c0f69117e94e9ebaac45a6c39bd707c4"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      MainPipelineTriggerType: ""
+      pl_name: ""
+      ManualPartitionID: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_app01_psql_app01_product_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_psql_app01_product_main"
+    pipelineId: "70da7e3d5c07e8e01e6c74a6b3d92eaf"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      MainPipelineTriggerType: ""
+      pl_name: ""
+      ManualPartitionID: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_app01_psql_occ_promotion_service_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_app01_psql_occ_promotion_service_main"
+    pipelineId: "46b34ad51392a29b9ac6c22fd6af319f"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      MainPipelineTriggerType: ""
+      pl_name: ""
+      ManualPartitionID: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "src_to_dl"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_app01_main/activities/src_to_dl/src_to_dl.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_app01_psql_app01_product_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_app01_psql_occ_promotion_service_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_app01_psql_tac_product_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_app01_psql_app01_order_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_app01_psql_modelb_order_service_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_app01_psql_app01_promotion_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_app01_psql_app01_push_service_main"
+        dependencyConditions:
+        - "completed"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 21600
+  - name: "CCDD_DW"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_ecommerce_main_support_live_sanitized__pl_dbrs_fix_ccdd_deletion"
+    pipelineId: "8697f221c6a6d67180035dc4ee1bfbde"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      app_name: "ecom_dw"
+      start_time_api: "NA"
+      end_time_api: "NA"
+      del_table_name: "NA"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "src_to_dl"
+        dependencyConditions:
+        - "succeeded"
+  - name: "CCDD_RW"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_ecommerce_main_support_live_sanitized__pl_dbrs_fix_ccdd_deletion"
+    pipelineId: "8697f221c6a6d67180035dc4ee1bfbde"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      app_name: "ecom_rw"
+      start_time_api: "NA"
+      end_time_api: "NA"
+      del_table_name: "NA"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "CCDD_DW"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_app01_psql_app01_order_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_psql_app01_order_main"
+    pipelineId: "55223fc9c346b59e247830e4fecddbf1"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      MainPipelineTriggerType: ""
+      pl_name: ""
+      ManualPartitionID: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_app01_psql_tac_product_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_psql_tac_product_main"
+    pipelineId: "2dae41e406d9465a813b9b8e6d809ee6"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      MainPipelineTriggerType: ""
+      pl_name: ""
+      ManualPartitionID: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_app01_psql_modelb_order_service_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_psql_modelb_order_service_main"
+    pipelineId: "e29b83aaa4cbfa7f2e9f7b8e24521d2a"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pl_name: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_app01_psql_app01_push_service_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_app01_psql_app01_push_service_main"
+    pipelineId: "7e2a23752091168b43d479f5d39dee2b"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pl_name: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_app01_psql_app01_promotion_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_app01_psql_app01_promotion_main"
+    pipelineId: "1b6b2b3bb54d2e6fc9acb1957674a480"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pl_name: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "TableList"
+    default: "source_table_1,source_table_2,source_table_3,source_table_4,source_table_5,source_table_6,source_table_7,source_table_8,source_table_9,source_table_10,source_table_11,source_table_12,source_table_13,source_table_14,source_table_15,source_table_16,source_table_17,source_table_18,source_table_19,source_table_20,source_table_21,source_table_22,source_table_23,source_table_24"
+  - name: "partition_date"
+    default: ""
+  - name: "is_header"
+    default: "False"
+  - name: "system_name"
+    default: "<<REDACTED>>"
+  - name: "logEnabled"
+    default: "1"
+  variables:
+  - name: "env_storage"
+    default: ""
+  - name: "PartitionID"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

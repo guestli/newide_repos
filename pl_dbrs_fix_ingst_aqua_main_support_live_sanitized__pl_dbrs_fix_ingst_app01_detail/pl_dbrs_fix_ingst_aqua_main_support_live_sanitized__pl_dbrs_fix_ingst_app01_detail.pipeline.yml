@@ -1,0 +1,278 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "bc247208b04f29310fa7e00740ee325a"
+spec:
+  displayName: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Copymydata2Landingzone"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/Copymydata2Landingzone/Copymydata2Landingzone.json"
+    dependsOn:
+      activities:
+      - name: "SetLastModifiedTime"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "Add_Column"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/Add_Column/Add_Column.json"
+    dependsOn:
+      activities:
+      - name: "Copymydata2Landingzone"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "Remove_Log"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/Remove_Log/Remove_Log.json"
+    dependsOn:
+      activities:
+      - name: "Add_Column"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "Copy_Landingzone2Hive"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/Copy_Landingzone2Hive/Copy_Landingzone2Hive.json"
+    dependsOn:
+      activities:
+      - name: "CheckFileContent"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "SetLastModifiedTime"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "LastMdfDt"
+    value:
+      rawValue: "@formatDateTime(addhours(utcnow(), 8), 'yyyy-MM-dd')"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "StartLogRecord"
+        dependencyConditions:
+        - "succeeded"
+  - name: "CheckFileContent"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__ls_asql_infra_04"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "Add_Column"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@Or(Equals(pipeline().TriggerType,'Manual'),Equals(pipeline().parameters.MainPipelineTriggerType,\
+        \ 'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', split(pipeline().parameters.FileName, ':')[1])"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@split(pipeline().parameters.FileName, ':')[1]"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "src_to_dl"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/src_to_dl/src_to_dl.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "LogCount"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 240000
+      timeoutSeconds: 10800
+  - name: "LogCount"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/LogCount/LogCount.json"
+    dependsOn:
+      activities:
+      - name: "Copy_Landingzone2Hive"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "LandingCopy2_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/LandingCopy2_fail/LandingCopy2_fail.json"
+    dependsOn:
+      activities:
+      - name: "Copy_Landingzone2Hive"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckFileContent_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/CheckFileContent_fail/CheckFileContent_fail.json"
+    dependsOn:
+      activities:
+      - name: "CheckFileContent"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "AddColumn_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/AddColumn_fail/AddColumn_fail.json"
+    dependsOn:
+      activities:
+      - name: "Add_Column"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "LandingCopy_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/LandingCopy_fail/LandingCopy_fail.json"
+    dependsOn:
+      activities:
+      - name: "Copymydata2Landingzone"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "StartLogRecord"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail/activities/StartLogRecord/StartLogRecord.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  parameters:
+  - name: "FileName"
+    default: ""
+  - name: "RawDataDirectory"
+    default: "/hive/warehouse/external/rawdata_app01.db"
+  - name: "DatabaseName"
+    default: "rawdata_app01"
+  - name: "DestPartitionColumnName"
+    default: "partition_date"
+  - name: "Location"
+    default: "/hive/warehouse/external/rawdata_app01.db"
+  - name: "LandingContainer"
+    default: "landingzone"
+  - name: "SourceContainer"
+    default: "sales-daily-report"
+  - name: "PartitionID"
+    default: ""
+  - name: "FileSurfix"
+    default: ""
+  - name: "LandingDirectory"
+    default: "bmbs/app01"
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "env_storage"
+    default: ""
+  - name: "TableName"
+    default: ""
+  - name: "is_header"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  - name: "LogEnabled"
+    default: ""
+  variables:
+  - name: "LastMdfDt"
+    default: ""
+  - name: "JobNameVar"
+    default: ""
+  - name: "logInRunningLogAsSubPipeline"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

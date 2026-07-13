@@ -1,0 +1,221 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "a85def015c6a31aa64964e6f135c8879"
+spec:
+  displayName: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 19 ? * THU"
+    priority: "d5"
+  activities:
+  - name: "Set_PartitionID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.PartitionID), formatDateTime(addhours(utcnow(),8),'yyyy-MM-dd'),\
+        \ pipeline().parameters.PartitionID)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Set_FileSurfix"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_FileSurfix"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "FileSurfix"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.FileSurfix), formatDateTime(addhours(utcnow(),8),'yyyyMMdd'),\
+        \ pipeline().parameters.FileSurfix)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetEnvStorage"
+        dependencyConditions:
+        - "succeeded"
+  - name: "GetEnv"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__ls_asql_infra_04"
+    table: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__ds_asql_conf_environment"
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "SetEnvStorage"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "env_storage"
+    value:
+      rawValue: "@activity('GetEnv').output.firstrow.env_storage"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "GetEnv"
+        dependencyConditions:
+        - "succeeded"
+  - name: "IterateAquaFiles"
+    type: "for_each"
+    items: "@pipeline().parameters.Files"
+    concurrency: 2
+    activities:
+    - name: "pl_dbrs_fix_ingst_app01_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_aqua_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail"
+      pipelineId: "bc247208b04f29310fa7e00740ee325a"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        FileName: ""
+        RawDataDirectory: "/hive/warehouse/external/rawdata_app01.db"
+        DatabaseName: "bz_cn_dl.rawdata_app01"
+        DestPartitionColumnName: "partition_date"
+        Location: "/hive/warehouse/external/rawdata_app01.db"
+        LandingContainer: "landingzone"
+        SourceContainer: "sales-daily-report"
+        PartitionID: ""
+        FileSurfix: ""
+        LandingDirectory: "bmbs/app01"
+        MainPipelineTriggerType: ""
+        env_storage: ""
+        TableName: ""
+        is_header: ""
+        storage_account: ""
+        LogEnabled: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_PartitionID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Env"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "Env"
+    value:
+      rawValue: "@pipeline().globalParameters.Environment"
+    outputVariables: []
+  - name: "If_Condition1"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "{{pipeline.vars.Env}}"
+      op: "EQUAL_TO"
+      right: "INT"
+    dependsOn:
+      activities:
+      - name: "Env"
+        dependencyConditions:
+        - "succeeded"
+  - name: "container_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "dir_prefix"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "storage_account_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "container_INT"
+        dependencyConditions:
+        - "succeeded"
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "container_prod"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "dir_prefix"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "storage_account_prod"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "container_prod"
+        dependencyConditions:
+        - "succeeded"
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  parameters:
+  - name: "Files"
+    default: "[china_guk_findings:rw_vhcl_app01_claimes_findings, china_guk_damages:rw_vhcl_app01_claimes_damages,\
+      \ china_guk_parts:rw_vhcl_app01_claimes_parts, china_guk_costs:rw_vhcl_app01_claimes_costs]"
+  - name: "ScriptPath"
+    default: "/edw/edw_scripts/dwd_data/app01/app01.sh"
+  - name: "FileSurfix"
+    default: ""
+  - name: "PartitionID"
+    default: ""
+  - name: "is_header"
+    default: "False"
+  - name: "LogEnabled"
+    default: "1"
+  variables:
+  - name: "PartitionID"
+    default: "2019-06-11"
+  - name: "FileSurfix"
+    default: "20190611"
+  - name: "env_storage"
+    default: ""
+  - name: "logInRunningLogAsSubPipeline"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  - name: "Env"
+    default: ""
+  - name: "dir_prefix"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

@@ -1,0 +1,203 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "1a8be76ee98664abceb3403c67f20583"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_main2"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 3 * * ?"
+    priority: "d5"
+  activities:
+  - name: "pl_dbrs_job_ingst_s3_app01_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_s3_app01_main"
+    pipelineId: "ee269984584b663a54ff270af3ffff14"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pTableList: "source_table_1,source_table_2,source_table_3"
+      pl_name: ""
+      env_storage: ""
+      PartitionID: ""
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Notebook1"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_app01_main2/activities/Notebook1/Notebook1.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "pl_dbrs_job_ingst_s3_app01_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_psql_app012lpo_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_psql_app012srv_prod_main"
+        dependencyConditions:
+        - "completed"
+      - name: "pl_dbrs_job_ingst_psql_app012srv_fullfill_main"
+        dependencyConditions:
+        - "completed"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 43200
+  - name: "Storage_Account"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "@pipeline().globalParameters.CaseScriptBlobName"
+    outputVariables: []
+  - name: "Set_Partition_ID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(equals(pipeline().parameters.pt,'curdate'),formatDateTime(adddays(addhours(utcnow(),8),-1),'yyyy-MM-dd'),pipeline().parameters.pt)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Storage_Account"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_psql_app012lpo_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_psql_app012lpo_main"
+    pipelineId: "b90781c0f4bd97fe3b50e168fc426f12"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pt: ""
+      pTableList: "source_table_1,source_table_2,source_table_3,source_table_4"
+      pl_name: ""
+      PartitionID: ""
+      env_storage: ""
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_psql_app012srv_fullfill_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_psql_app012srv_fullfill_main"
+    pipelineId: "540014deb637ed6bb187c7ef79612956"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pt: ""
+      pTableList: "source_table_1,source_table_2,source_table_3,source_table_4,source_table_5,source_table_6,source_table_7"
+      pl_name: ""
+      env_storage: ""
+      PartitionID: ""
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_job_ingst_psql_app012srv_prod_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_psql_app012srv_prod_main"
+    pipelineId: "939cd825a26c095d1d0db93900fa326c"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      pt: ""
+      pTableList: "rw_srvc_tireo2o_product"
+      pl_name: ""
+      env_storage: ""
+      PartitionID: ""
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "CCDD_DW"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__pl_dbrs_fix_ccdd_deletion"
+    pipelineId: "acba4beb424bc922b242b767b1dad0aa"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      app_name: "occas_s3_dw"
+      start_time_api: "NA"
+      end_time_api: "NA"
+      del_table_name: "NA"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Notebook1"
+        dependencyConditions:
+        - "succeeded"
+  - name: "CCDD_RW"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__pl_dbrs_fix_ccdd_deletion"
+    pipelineId: "acba4beb424bc922b242b767b1dad0aa"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      app_name: "occas_s3_rw"
+      start_time_api: "NA"
+      end_time_api: "NA"
+      del_table_name: "NA"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "CCDD_DW"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "logEnabled"
+    default: "1"
+  - name: "pTableList"
+    default: "source_table_1,source_table_2,source_table_3,source_table_4,source_table_5,source_table_6,source_table_7,source_table_8,source_table_9,source_table_10,source_table_11,source_table_12,source_table_13,source_table_14,source_table_15"
+  - name: "pt"
+    default: "curdate"
+  - name: "is_header"
+    default: "False"
+  - name: "system_name"
+    default: "<<REDACTED>>"
+  variables:
+  - name: "PartitionID"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

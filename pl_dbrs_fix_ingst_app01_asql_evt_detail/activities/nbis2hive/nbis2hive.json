@@ -1,0 +1,72 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "sql_server",
+      "parameter" : {
+        "dataSourceId" : "ls_asql_app01",
+        "dataSourceName" : "ls_asql_app01",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "sql_server"
+      }
+    },
+    "writer" : {
+      "type" : "azureblobfs",
+      "parameter" : {
+        "dataSourceId" : "ls_adl2_infra_03",
+        "dataSourceName" : "ls_adl2_infra_03",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ {
+          "type" : "String",
+          "name" : "db",
+          "extraType" : null,
+          "description" : null
+        }, {
+          "type" : "String",
+          "name" : "tb",
+          "extraType" : null,
+          "description" : null
+        }, {
+          "type" : "String",
+          "name" : "col",
+          "extraType" : null,
+          "description" : null
+        }, {
+          "type" : "String",
+          "name" : "key",
+          "extraType" : null,
+          "description" : null
+        }, {
+          "type" : "String",
+          "name" : "type",
+          "extraType" : null,
+          "description" : null
+        }, {
+          "type" : "String",
+          "name" : "column_comment",
+          "extraType" : null,
+          "description" : null
+        } ],
+        "connectorType" : "azureblobfs"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

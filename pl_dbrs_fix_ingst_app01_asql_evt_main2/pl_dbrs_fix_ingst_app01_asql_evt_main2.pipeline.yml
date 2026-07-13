@@ -1,0 +1,257 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "fd798a096d7e0d5cefeaf15d36683e2e"
+spec:
+  displayName: "pl_dbrs_fix_ingst_app01_asql_evt_main2"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "ForEach"
+    type: "for_each"
+    items: "@activity('GetUpdateList').output.value"
+    concurrency: 3
+    activities:
+    - name: "pl_dbrs_fix_ingst_app01_asql_evt_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_app01_asql_evt_detail"
+      pipelineId: "b2b129af15e1e68e30c6c0f58b27890a"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        TableName: ""
+        partitionMonth: ""
+        partitionTime: ""
+        LogEnabled: "1"
+        JobDepName: ""
+        DatabaseName: ""
+        DataSourceSQL: ""
+        FileSystem: ""
+        directory: ""
+        type_name: ""
+        MainPipelineTriggerType: ""
+        is_header: ""
+        storage_account: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetUpdateList"
+        dependencyConditions:
+        - "succeeded"
+  - name: "copy_flag_to_landingzone_bakup_copy1"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/copy_flag_to_landingzone_bakup_copy1/copy_flag_to_landingzone_bakup_copy1.json"
+    dependsOn:
+      activities:
+      - name: "ForEach"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 10800
+  - name: "copy_flag_to_odp_copy1"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/copy_flag_to_odp_copy1/copy_flag_to_odp_copy1.json"
+    dependsOn:
+      activities:
+      - name: "copy_flag_to_landingzone_bakup_copy1"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 10800
+  - name: "GetUpdateList"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_nbis_asql_evt_main1_support_live_sanitized__ls_asql_infra_05"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "Start_Log"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 604800
+  - name: "check_ingestion_staus"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/check_ingestion_staus/check_ingestion_staus.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "ForEach"
+        dependencyConditions:
+        - "completed"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 43200
+  - name: "Start_Log"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/Start_Log/Start_Log.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 604800
+  - name: "nbis2rawSucceed"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/nbis2rawSucceed/nbis2rawSucceed.json"
+    dependsOn:
+      activities:
+      - name: "copy_flag_to_odp_copy1"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 604800
+  - name: "NBIS2Blob_Failed"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_asql_evt_main2/activities/NBIS2Blob_Failed/NBIS2Blob_Failed.json"
+    dependsOn:
+      activities:
+      - name: "ForEach"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@Or(Equals(pipeline().TriggerType,'Manual'),Equals(pipeline().parameters.MainPipelineTriggerType,\
+        \ 'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', pipeline().parameters.type_name)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@pipeline().parameters.type_name"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "If_Condition1"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "{{pipeline.params.env}}"
+      op: "EQUAL_TO"
+      right: "INT"
+  - name: "storage_account_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "storage_account_prod"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  parameters:
+  - name: "partition_month"
+    default: ""
+  - name: "partition_time"
+    default: ""
+  - name: "type_name"
+    default: ""
+  - name: "sourceFile"
+    default: ""
+  - name: "env"
+    default: ""
+  - name: "TableName"
+    default: ""
+  - name: "DatabaseName"
+    default: "datalake_app01"
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "is_header"
+    default: ""
+  variables:
+  - name: "JobNameVar"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

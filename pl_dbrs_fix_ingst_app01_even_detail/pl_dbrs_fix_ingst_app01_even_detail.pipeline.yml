@@ -1,0 +1,217 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "30d7c2a8501f9333840b63bd7e0df583"
+spec:
+  displayName: "pl_dbrs_fix_ingst_app01_even_detail"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "source2stg"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/source2stg/source2stg.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "StartLogRecord"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 240000
+      timeoutSeconds: 43200
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@Or(Equals(pipeline().TriggerType,'Manual'),Equals(pipeline().parameters.MainPipelineTriggerType,\
+        \ 'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', pipeline().parameters.TableName)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@pipeline().parameters.TableName"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "CopyRawData"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/CopyRawData/CopyRawData.json"
+    dependsOn:
+      activities:
+      - name: "source2stg"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "src_to_dl"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/src_to_dl/src_to_dl.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "LogCount"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 43200
+  - name: "StartLogRecord"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/StartLogRecord/StartLogRecord.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "LogCount"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/LogCount/LogCount.json"
+    dependsOn:
+      activities:
+      - name: "CopyRawData"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "Copy_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/Copy_fail/Copy_fail.json"
+    dependsOn:
+      activities:
+      - name: "CopyRawData"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "source2stg_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_ingst_app01_even_detail/activities/source2stg_fail/source2stg_fail.json"
+    dependsOn:
+      activities:
+      - name: "source2stg"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  parameters:
+  - name: "TableName"
+    default: ""
+  - name: "pt"
+    default: ""
+  - name: "LogEnabled"
+    default: ""
+  - name: "database_name"
+    default: ""
+  - name: "stg_table"
+    default: ""
+  - name: "root_path_item"
+    default: ""
+  - name: "table_type"
+    default: ""
+  - name: "primary_key"
+    default: ""
+  - name: "cols_dict_header"
+    default: ""
+  - name: "cols_dict_item"
+    default: ""
+  - name: "raw2lake_script"
+    default: ""
+  - name: "raw_count_script"
+    default: ""
+  - name: "lake_count_script"
+    default: ""
+  - name: "mode"
+    default: ""
+  - name: "source_select"
+    default: ""
+  - name: "ds_type"
+    default: ""
+  - name: "stg2raw_script"
+    default: ""
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "is_header"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  - name: "database_name_uc"
+    default: ""
+  variables:
+  - name: "logInRunningLogAsSubPipeline"
+    default: ""
+  - name: "JobNameVar"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

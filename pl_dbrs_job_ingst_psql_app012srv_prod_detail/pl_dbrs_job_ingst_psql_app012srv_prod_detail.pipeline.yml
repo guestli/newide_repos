@@ -1,0 +1,148 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "c3d9d62bc95b64fbe6456970b7b061e3"
+spec:
+  displayName: "pl_dbrs_job_ingst_psql_app012srv_prod_detail"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "source2raw"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_psql_app012srv_prod_detail/activities/source2raw/source2raw.json"
+    dependsOn:
+      activities:
+      - name: "RowDataCount"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 10800
+  - name: "StartLogRecord"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_psql_app012srv_prod_detail/activities/StartLogRecord/StartLogRecord.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "source2raw_fail"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_psql_app012srv_prod_detail/activities/source2raw_fail/source2raw_fail.json"
+    dependsOn:
+      activities:
+      - name: "source2raw"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "RowDataCount"
+    type: "look_up"
+    dataSource: "ls_psql_app01o2o_servicemall_product_new"
+    table: "ds_psql_app01o2o_servicemall_product"
+    dependsOn:
+      activities:
+      - name: "StartLogRecord"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 43200
+  - name: "RowCountError"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_psql_app012srv_prod_detail/activities/RowCountError/RowCountError.json"
+    dependsOn:
+      activities:
+      - name: "RowDataCount"
+        dependencyConditions:
+        - "failed"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@Or(Equals(pipeline().TriggerType,'Manual'),Equals(pipeline().parameters.MainPipelineTriggerType,\
+        \ 'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', pipeline().parameters.TableName)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@pipeline().parameters.TableName"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  parameters:
+  - name: "TableName"
+    default: "rw_part_tireo2o_order"
+  - name: "PartitionID"
+    default: "2020-03-01"
+  - name: "DatabaseName"
+    default: "rawdata_tireo2o"
+  - name: "LogEnabled"
+    default: "1"
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "env_storage"
+    default: "{ \t'HDFS_ROOT_DIR': 'xdlkmcninfstaccadls001', \t'pdlkmcninfsajob001':\
+      \ 'xdlkmcninfsajob001', \t'pdlkmcninfstaccadls002': 'xdlkmcninfstaccadls002',\
+      \ \t'pdlkmcninfstaccadls003': 'xdlkmcninfstaccadls001', \t'potrmcninfstaccblob032':\
+      \ 'xdlkmcninfstaccadls029', \t'PROD_OR_INT': 'INT' }"
+  - name: "source_select"
+    default: "tireo2o"
+  - name: "source_count"
+    default: "app01_Online_Sales_[thedate].csv"
+  - name: "source_level_name"
+    default: ""
+  - name: "pl_name"
+    default: ""
+  variables:
+  - name: "JobNameVar"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

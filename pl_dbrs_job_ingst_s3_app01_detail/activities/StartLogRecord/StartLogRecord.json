@@ -1,0 +1,67 @@
+{
+  "name" : "StartLogRecord",
+  "type" : "SqlServerStoredProcedure",
+  "dependsOn" : [ {
+    "activity" : "CheckTriggerType",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "storedProcedureName" : "[dbo].[usp_StartDatabricksLogRecording]",
+    "storedProcedureParameters" : {
+      "job_name" : {
+        "value" : {
+          "value" : "@variables('JobNameVar')",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "level_name" : {
+        "value" : {
+          "value" : "@pipeline().parameters.DatabaseName",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "pl_name" : {
+        "value" : {
+          "value" : "@pipeline().parameters.pl_name",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "src_level_name" : {
+        "value" : {
+          "value" : "@pipeline().parameters.source_type",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "enabled" : {
+        "value" : {
+          "value" : "@pipeline().parameters.LogEnabled",
+          "type" : "Expression"
+        },
+        "type" : "Int32"
+      },
+      "job_dep_name" : {
+        "value" : {
+          "value" : "@replace(pipeline().parameters.source_filename,'[thedate]',pipeline().parameters.PartitionID)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      }
+    }
+  },
+  "linkedServiceName" : {
+    "referenceName" : "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__ls_asql_infra_04",
+    "type" : "LinkedServiceReference"
+  }
+}
