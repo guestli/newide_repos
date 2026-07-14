@@ -1,0 +1,72 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "382bb7b571887b1a71078db025b7be0a"
+spec:
+  displayName: "pl_dmp_daily_mmcstore_tag_explode"
+  description: "18003fca-0000-4200-0000-69240f290000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "tag_explode"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/tag_explode/tag_explode.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+  - name: "get_mmc_tags"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/get_mmc_tags/get_mmc_tags.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "tag_explode"
+        dependencyConditions:
+        - "succeeded"
+  - name: "delete_tags_from_segment_api"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/delete_tags_from_segment_api/delete_tags_from_segment_api.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "get_mmc_tags"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

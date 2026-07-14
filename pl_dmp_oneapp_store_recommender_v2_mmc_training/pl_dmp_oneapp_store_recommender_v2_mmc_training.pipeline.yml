@@ -1,0 +1,85 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "9dae5a5790857283d8c08fe62af38014"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_training"
+  description: "150010e3-0000-4200-0000-69ef2e4c0000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "@pipeline().parameters.run_date"
+    outputVariables: []
+  - name: "Transform_features"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Transform_features/Transform_features.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Prepare_model_data"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Prepare_model_data/Prepare_model_data.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Transform_features"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Train_model"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Train_model/Train_model.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Prepare_model_data"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

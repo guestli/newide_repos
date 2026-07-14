@@ -1,0 +1,32 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "c8898cad2ef0b51093e5b8913b641f0a"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_init_tables"
+  description: "150019e3-0000-4200-0000-69ef2e4c0000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "init_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_init_tables/activities/init_tables/init_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

@@ -1,0 +1,112 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "1fb889b98ace5b59063c524fb6c89919"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
+  description: "04001eb5-0000-4200-0000-69f18c970000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Extraction"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_data_update"
+    pipelineId: "0fb0d8568dd7069b5fc9e48c2c578956"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: ""
+      table_config_path: ""
+      model_config_path: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Training"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_training"
+    pipelineId: "9dae5a5790857283d8c08fe62af38014"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: ""
+      table_config_path: ""
+      model_config_path: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Extraction"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Inference"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel"
+    pipelineId: "8526520586ae32cb41aa0a6edb52463d"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: ""
+      table_config_path: ""
+      model_config_path: ""
+      parallel_shard_count: ""
+      parallel_batch_count: ""
+      parallel_shard_id_base: ""
+      parallel_shard_ids: ""
+      infer_config_path: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Training"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "@formatDateTime(addDays(addHours(utcNow(), 8), -2), 'yyyy-MM-dd')"
+    outputVariables: []
+  - name: "pl_dmp_oneapp_scroring_layer_v2"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_scroring_layer_v2"
+    pipelineId: "1bc738649045603622a6b3ab8447d106"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      dt: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "combine_mmc_lpo_prediction_v2"
+        dependencyConditions:
+        - "succeeded"
+  - name: "combine_mmc_lpo_prediction_v2"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_parallel/activities/combine_mmc_lpo_prediction_v2/combine_mmc_lpo_prediction_v2.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Inference"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

@@ -1,0 +1,228 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "17ea1949c4c10455d3dc97ddb6bfec82"
+spec:
+  displayName: "pl_dmp_oneapp_community_recommender_data_update"
+  description: "050092b5-0000-4200-0000-69e5d7440000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "User_post_attributes"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_attributes/User_post_attributes.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "@pipeline().parameters.run_date"
+    outputVariables: []
+  - name: "User_post_dwell_time"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_dwell_time/User_post_dwell_time.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "User_post_interaction"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_interaction/User_post_interaction.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Post_geolocation_indexing"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Post_geolocation_indexing/Post_geolocation_indexing.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Post_follower_indexing"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Post_follower_indexing/Post_follower_indexing.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "media_item_indexing"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/media_item_indexing/media_item_indexing.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Post_content"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Post_content/Post_content.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "media_item_indexing"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Post_embedding"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Post_embedding/Post_embedding.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Post_content"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Concatenate_bottom_features"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Concatenate_bottom_features/Concatenate_bottom_features.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "User_post_attributes"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Post_embedding"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Process_two_tower_data"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_data_update/activities/Process_two_tower_data/Process_two_tower_data.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Concatenate_bottom_features"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

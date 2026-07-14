@@ -1,0 +1,42 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "azuredatabricksdeltalake",
+      "parameter" : {
+        "dataSourceId" : "1e30d44a849b2bde7a6752e339da38bb",
+        "dataSourceName" : "ls_AzureDatabricksDeltaLake_vlc",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "azuredatabricksdeltalake"
+      }
+    },
+    "writer" : {
+      "type" : "sql_server",
+      "parameter" : {
+        "dataSourceId" : "cac2574830949510b538688b6456b8ff",
+        "dataSourceName" : "ls_asql_offdmp_2",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ ],
+        "connectorType" : "sql_server"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

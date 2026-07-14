@@ -1,0 +1,90 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "8526520586ae32cb41aa0a6edb52463d"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel"
+  description: "150016e3-0000-4200-0000-69ef2e4c0000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "@pipeline().parameters.run_date"
+    outputVariables: []
+  - name: "Run_ranking_shards"
+    type: "for_each"
+    items: "@split(pipeline().parameters.parallel_shard_ids, ',')"
+    concurrency: 5
+    activities:
+    - name: "Run_ranking_model_shard"
+      type: "notebook"
+      description: "A new Notebook job"
+      source: "WORKSPACE"
+      path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Run_ranking_model_shard/Run_ranking_model_shard.ipynb"
+      kernelType: "emr_serverless_spark_python"
+      engineQueue: "公共队列-Default"
+      computingResourceGroupName: "public_compute"
+      computingResourceGroupId: 1012
+      sparkConf: []
+      executeParam:
+        image:
+          imageUrl: ""
+      parameters: []
+      resources: []
+    dependsOn:
+      activities:
+      - name: "Create_candidate_set"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Merge_ranking_shards"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Merge_ranking_shards/Merge_ranking_shards.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Run_ranking_shards"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Create_candidate_set"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Create_candidate_set/Create_candidate_set.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

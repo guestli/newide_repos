@@ -1,0 +1,174 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "1c0d44ea03554d9e481c1fa07c085c02"
+spec:
+  displayName: "pl_dmp_oneapp_community_recommender_retrieval"
+  description: "7b036510-0000-4200-0000-69c30d320000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "@pipeline().parameters.run_date"
+    outputVariables: []
+  - name: "Geolocation_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/Geolocation_retriever/Geolocation_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Follower_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/Follower_retriever/Follower_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Train_i2i_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/Train_i2i_retriever/Train_i2i_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "run_i2i_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/run_i2i_retriever/run_i2i_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Train_i2i_retriever"
+        dependencyConditions:
+        - "succeeded"
+  - name: "train_two_tower_model"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/train_two_tower_model/train_two_tower_model.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Run_two_tower_model"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/Run_two_tower_model/Run_two_tower_model.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "train_two_tower_model"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Pool_retrieved_posts"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_recommender_retrieval/activities/Pool_retrieved_posts/Pool_retrieved_posts.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "Run_two_tower_model"
+        dependencyConditions:
+        - "succeeded"
+      - name: "run_i2i_retriever"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Geolocation_retriever"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Follower_retriever"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false
