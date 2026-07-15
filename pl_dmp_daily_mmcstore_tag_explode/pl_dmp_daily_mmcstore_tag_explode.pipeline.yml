@@ -16,14 +16,28 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/tag_explode/tag_explode.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
   - name: "get_mmc_tags"
     type: "notebook"
     description: "A new Notebook job"
@@ -31,19 +45,33 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/get_mmc_tags/get_mmc_tags.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
     dependsOn:
       activities:
       - name: "tag_explode"
         dependencyConditions:
         - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
   - name: "delete_tags_from_segment_api"
     type: "notebook"
     description: "A new Notebook job"
@@ -51,20 +79,34 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_daily_mmcstore_tag_explode/activities/delete_tags_from_segment_api/delete_tags_from_segment_api.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
     dependsOn:
       activities:
       - name: "get_mmc_tags"
         dependencyConditions:
         - "succeeded"
-  schedulingResourceGroupName: "public_schedule"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "公共调度资源组"
   schedulingResourceGroupId: 1009
   dependsOn:
     pipelines: []

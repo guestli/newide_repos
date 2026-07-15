@@ -93,7 +93,7 @@ spec:
       - name: "Ranking"
         dependencyConditions:
         - "succeeded"
-  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupName: "公共调度资源组"
   schedulingResourceGroupId: 1009
   dependsOn:
     pipelines: []

@@ -16,15 +16,29 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_community_content_sqs/activities/Content_recommendation_to_SQS/Content_recommendation_to_SQS.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
-  schedulingResourceGroupName: "public_schedule"
+    position:
+      x: -110
+      "y": 0
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "公共调度资源组"
   schedulingResourceGroupId: 1009
   dependsOn:
     pipelines: []

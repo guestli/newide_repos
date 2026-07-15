@@ -24,19 +24,33 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Transform_features/Transform_features.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
     dependsOn:
       activities:
       - name: "Set_run_date"
         dependencyConditions:
         - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
   - name: "Prepare_model_data"
     type: "notebook"
     description: "A new Notebook job"
@@ -44,19 +58,33 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Prepare_model_data/Prepare_model_data.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
     dependsOn:
       activities:
       - name: "Transform_features"
         dependencyConditions:
         - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
   - name: "Train_model"
     type: "notebook"
     description: "A new Notebook job"
@@ -64,20 +92,34 @@ spec:
     path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Train_model/Train_model.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算"
     computingResourceGroupId: 1012
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
-        imageUrl: ""
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
     parameters: []
     resources: []
+    position:
+      x: -110
+      "y": 0
     dependsOn:
       activities:
       - name: "Prepare_model_data"
         dependencyConditions:
         - "succeeded"
-  schedulingResourceGroupName: "public_schedule"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "公共调度资源组"
   schedulingResourceGroupId: 1009
   dependsOn:
     pipelines: []
