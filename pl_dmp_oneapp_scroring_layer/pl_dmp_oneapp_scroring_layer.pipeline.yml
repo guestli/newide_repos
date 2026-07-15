@@ -13,7 +13,7 @@ spec:
     type: "notebook"
     description: "A new Notebook job"
     source: "WORKSPACE"
-    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_scroring_layer/activities/oneapp_dmp_scroring_layer/oneapp_dmp_scroring_layer.ipynb"
+    path: "/Workspace/libopeng_folder/pl_dmp_oneapp_scroring_layer/activities/oneapp_dmp_scroring_layer/oneapp_dmp_scroring_layer.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "公共计算"
@@ -43,7 +43,7 @@ spec:
     description: "A new Copy Data job"
     source: "WORKSPACE"
     engineType: "dts_batch"
-    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_scroring_layer/activities/Copy_to_DMP_DB/Copy_to_DMP_DB.json"
+    path: "/Workspace/libopeng_folder/pl_dmp_oneapp_scroring_layer/activities/Copy_to_DMP_DB/Copy_to_DMP_DB.json"
     dependsOn:
       activities:
       - name: "create_temp_table"
@@ -82,7 +82,7 @@ spec:
   - name: "drop_and_sp_rename_temp_table"
     type: "custom"
     source: "WORKSPACE"
-    path: "/Workspace/User/demo/etl_pipeline/pl_dmp_oneapp_scroring_layer/activities/drop_and_sp_rename_temp_table/drop_and_sp_rename_temp_table.json"
+    path: "/Workspace/libopeng_folder/pl_dmp_oneapp_scroring_layer/activities/drop_and_sp_rename_temp_table/drop_and_sp_rename_temp_table.json"
     dependsOn:
       activities:
       - name: "create_index_fro_temp_table"
