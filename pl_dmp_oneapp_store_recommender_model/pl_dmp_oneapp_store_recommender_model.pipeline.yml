@@ -1,0 +1,228 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "2a6aee8683f07ea3faca82366cf5561b"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_model"
+  description: "04002eb5-0000-4200-0000-69f18c980000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 0 1/1 * ?"
+    priority: "d5"
+  activities:
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "${DATE-1}"
+    outputVariables: []
+  - name: "process_mmc_vin_product_rating_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_model/activities/process_mmc_vin_product_rating_tables/process_mmc_vin_product_rating_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "process_lpo_vin_product_rating_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_model/activities/process_lpo_vin_product_rating_tables/process_lpo_vin_product_rating_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "fit_and_predict_mmc"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_model/activities/fit_and_predict_mmc/fit_and_predict_mmc.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "process_mmc_vin_product_rating_tables"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "fit_and_predict_lpo"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_model/activities/fit_and_predict_lpo/fit_and_predict_lpo.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "process_lpo_vin_product_rating_tables"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "combine_mmc_lpo_prediction_v1"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_model/activities/combine_mmc_lpo_prediction_v1/combine_mmc_lpo_prediction_v1.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "fit_and_predict_mmc"
+        dependencyConditions:
+        - "succeeded"
+      - name: "fit_and_predict_lpo"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "pl_dmp_oneapp_scroring_layer"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_scroring_layer"
+    pipelineId: "6441699cbf1a52d68ba296a82a218f70"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      dt: "{{pipeline.vars.run_date}}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "combine_mmc_lpo_prediction_v1"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
+    pipelineId: "1fb889b98ace5b59063c524fb6c89919"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "fit_and_predict_lpo"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

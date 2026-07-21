@@ -1,0 +1,46 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "c8898cad2ef0b51093e5b8913b641f0a"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_init_tables"
+  description: "150019e3-0000-4200-0000-69ef2e4c0000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "init_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_init_tables/activities/init_tables/init_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

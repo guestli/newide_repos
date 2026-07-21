@@ -1,0 +1,114 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "382bb7b571887b1a71078db025b7be0a"
+spec:
+  displayName: "pl_dmp_daily_mmcstore_tag_explode"
+  description: "18003fca-0000-4200-0000-69240f290000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "tag_explode"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/tag_explode/tag_explode.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "get_mmc_tags"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/get_mmc_tags/get_mmc_tags.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "tag_explode"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "delete_tags_from_segment_api"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/delete_tags_from_segment_api/delete_tags_from_segment_api.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "get_mmc_tags"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

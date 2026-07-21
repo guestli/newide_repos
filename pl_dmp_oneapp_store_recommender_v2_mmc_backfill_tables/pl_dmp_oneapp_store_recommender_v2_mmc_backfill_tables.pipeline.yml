@@ -1,0 +1,104 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "54d2811caa94d50473b35588ff95a59c"
+spec:
+  displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_backfill_tables"
+  description: "15001fe3-0000-4200-0000-69ef2e4c0000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Set_start_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "start_date"
+    value:
+      rawValue: "2026-04-20"
+    outputVariables: []
+  - name: "Set_end_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "end_date"
+    value:
+      rawValue: "@addhours(utcnow(),-48,'yyyy-MM-dd')"
+    outputVariables: []
+  - name: "backfill_attribute_and_interaction_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_backfill_tables/activities/backfill_attribute_and_interaction_tables/backfill_attribute_and_interaction_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_start_date"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Set_end_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "backfill_feature_tables"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_backfill_tables/activities/backfill_feature_tables/backfill_feature_tables.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "backfill_attribute_and_interaction_tables"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

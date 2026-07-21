@@ -1,0 +1,272 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "1c0d44ea03554d9e481c1fa07c085c02"
+spec:
+  displayName: "pl_dmp_oneapp_community_recommender_retrieval"
+  description: "7b036510-0000-4200-0000-69c30d320000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "{{pipeline.params.run_date}}"
+    outputVariables: []
+  - name: "Geolocation_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Geolocation_retriever/Geolocation_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "Follower_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Follower_retriever/Follower_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "Train_i2i_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Train_i2i_retriever/Train_i2i_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "run_i2i_retriever"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/run_i2i_retriever/run_i2i_retriever.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Train_i2i_retriever"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "train_two_tower_model"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/train_two_tower_model/train_two_tower_model.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "Run_two_tower_model"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Run_two_tower_model/Run_two_tower_model.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "train_two_tower_model"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "Pool_retrieved_posts"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Pool_retrieved_posts/Pool_retrieved_posts.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Run_two_tower_model"
+        dependencyConditions:
+        - "succeeded"
+      - name: "run_i2i_retriever"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Geolocation_retriever"
+        dependencyConditions:
+        - "succeeded"
+      - name: "Follower_retriever"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

@@ -1,0 +1,151 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "6441699cbf1a52d68ba296a82a218f70"
+spec:
+  displayName: "pl_dmp_oneapp_scroring_layer"
+  description: "150083be-0000-4200-0000-6a28c9960000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "oneapp_dmp_scroring_layer"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/oneapp_dmp_scroring_layer/oneapp_dmp_scroring_layer.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "new_emr_queue_20260527140648-notebook_test"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 0
+      maxRetries: 100
+      minRetryIntervalSeconds: 0
+  - name: "Copy_to_DMP_DB"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/Copy_to_DMP_DB/Copy_to_DMP_DB.json"
+    dependsOn:
+      activities:
+      - name: "create_temp_table"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      timeoutSeconds: 43200
+      maxRetries: 2
+      minRetryIntervalSeconds: 30
+  - name: "create_temp_table"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/create_temp_table/create_temp_table.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "default"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "oneapp_dmp_scroring_layer"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 43200
+      maxRetries: 0
+      minRetryIntervalSeconds: 30
+  - name: "create_index_fro_temp_table"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/create_index_fro_temp_table/create_index_fro_temp_table.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "default"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "Copy_to_DMP_DB"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 43200
+      maxRetries: 0
+      minRetryIntervalSeconds: 30
+  - name: "drop_and_sp_rename_temp_table"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/drop_and_sp_rename_temp_table/drop_and_sp_rename_temp_table.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "default"
+    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupId: 1099
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+      cpuCores: 1
+      memoryMb: 4096
+    parameters: []
+    resources: []
+    position:
+      x: -110
+      "y": 0
+    dependsOn:
+      activities:
+      - name: "create_index_fro_temp_table"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      retryOnTimeout: true
+      timeoutSeconds: 604800
+      maxRetries: 2
+      minRetryIntervalSeconds: 60
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

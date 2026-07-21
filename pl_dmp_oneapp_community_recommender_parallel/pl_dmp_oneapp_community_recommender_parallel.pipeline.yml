@@ -1,0 +1,101 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "34e635b839e748b6e149ab4e7453f838"
+spec:
+  displayName: "pl_dmp_oneapp_community_recommender_parallel"
+  description: "05009cb5-0000-4200-0000-69e5d7440000"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 0 1/1 * ?"
+    priority: "d5"
+  activities:
+  - name: "Extraction"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_community_recommender_data_update"
+    pipelineId: "17ea1949c4c10455d3dc97ddb6bfec82"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: "{{pipeline.vars.run_date}}"
+      data_config_path: "{{pipeline.params.data_config_path}}"
+      two_tower_retriever_config_path: "{{pipeline.params.two_tower_retriever_config_path}}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Set_run_date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Retrieval"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_community_recommender_retrieval"
+    pipelineId: "1c0d44ea03554d9e481c1fa07c085c02"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: "{{pipeline.vars.run_date}}"
+      data_config_path: "{{pipeline.params.data_config_path}}"
+      geo_retriever_config_path: "{{pipeline.params.geo_retriever_config_path}}"
+      follower_retriever_config_path: "{{pipeline.params.follower_retriever_config_path}}"
+      i2i_retriever_config_path: "{{pipeline.params.i2i_retriever_config_path}}"
+      two_tower_retriever_config_path: "{{pipeline.params.two_tower_retriever_config_path}}"
+      ranking_num_shards: "{{pipeline.params.parallel_shard_count}}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Extraction"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Ranking"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_community_recommender_ranking_parallel"
+    pipelineId: "57de9c4d3de2c70a735b122f7d673254"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      run_date: "{{pipeline.vars.run_date}}"
+      data_config_path: "{{pipeline.params.data_config_path}}"
+      ranker_config_path: "{{pipeline.params.ranker_config_path}}"
+      parallel_shard_count: "{{pipeline.params.parallel_shard_count}}"
+      parallel_batch_count: "{{pipeline.params.parallel_batch_count}}"
+      parallel_shard_id_base: "{{pipeline.params.parallel_shard_id_base}}"
+      parallel_shard_ids: "{{pipeline.params.parallel_shard_ids}}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Retrieval"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_run_date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "run_date"
+    value:
+      rawValue: "${DATE}"
+    outputVariables: []
+  - name: "Content_to_SQS"
+    type: "execute_pipeline"
+    pipelineName: "pl_dmp_oneapp_community_content_sqs"
+    pipelineId: "863b7070d5d03d85fbdc4d039652db4b"
+    projectId: "11026"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      Profile: "PROD"
+      Mode: "SEND"
+      run_date: "{{pipeline.vars.run_date}}"
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "Ranking"
+        dependencyConditions:
+        - "succeeded"
+  schedulingResourceGroupName: "exclusive_schedule"
+  schedulingResourceGroupId: 1302
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false
