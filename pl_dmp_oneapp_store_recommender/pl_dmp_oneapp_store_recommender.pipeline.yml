@@ -24,7 +24,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender/activities/process_mmc_vin_product_rating_tables/process_mmc_vin_product_rating_tables.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -58,7 +58,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender/activities/process_lpo_vin_product_rating_tables/process_lpo_vin_product_rating_tables.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -92,7 +92,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender/activities/fit_and_predict_mmc/fit_and_predict_mmc.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -126,7 +126,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender/activities/fit_and_predict_lpo/fit_and_predict_lpo.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -160,7 +160,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender/activities/combine_mmc_lpo_prediction/combine_mmc_lpo_prediction.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"

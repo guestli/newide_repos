@@ -16,7 +16,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/tag_explode/tag_explode.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -45,7 +45,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/get_mmc_tags/get_mmc_tags.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -79,7 +79,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/delete_tags_from_segment_api/delete_tags_from_segment_api.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"

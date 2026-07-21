@@ -24,7 +24,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Transform_features/Transform_features.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -58,7 +58,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Prepare_model_data/Prepare_model_data.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -92,7 +92,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Train_model/Train_model.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"

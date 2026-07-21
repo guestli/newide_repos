@@ -24,7 +24,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_data_update/activities/User_product_attributes_and_interactions/User_product_attributes_and_interactions.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -58,7 +58,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_data_update/activities/bottom_features/bottom_features.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"

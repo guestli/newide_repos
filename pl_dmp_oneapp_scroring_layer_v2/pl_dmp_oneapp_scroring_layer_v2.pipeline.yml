@@ -16,7 +16,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer_v2/activities/oneapp_dmp_scroring_layer/oneapp_dmp_scroring_layer.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -60,7 +60,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer_v2/activities/create_temp_table/create_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf: []
     executeParam:
@@ -90,7 +90,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer_v2/activities/create_index_fro_temp_table/create_index_fro_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf: []
     executeParam:
@@ -120,7 +120,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer_v2/activities/drop_and_sp_rename_temp_table/drop_and_sp_rename_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "exclusive_compute"
+    computingResourceGroupName: "vke192"
     computingResourceGroupId: 1099
     sparkConf: []
     executeParam:
