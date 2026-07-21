@@ -143,6 +143,9 @@ spec:
       timeoutSeconds: 604800
       maxRetries: 2
       minRetryIntervalSeconds: 60
+  parameters:
+  - name: "dt"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

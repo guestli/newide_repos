@@ -158,6 +158,24 @@ spec:
       timeoutSeconds: 0
       maxRetries: 100
       minRetryIntervalSeconds: 0
+  parameters:
+  - name: "parallel_shard_count"
+    default: "4"
+  - name: "parallel_shard_ids"
+    default: "0,1,2,3"
+  - name: "parallel_batch_count"
+    default: "4"
+  - name: "data_config_path"
+    default: ""
+  - name: "ranker_config_path"
+    default: ""
+  - name: "parallel_shard_id_base"
+    default: "0"
+  - name: "run_date"
+    default: ""
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

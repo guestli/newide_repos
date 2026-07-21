@@ -118,6 +118,24 @@ spec:
       timeoutSeconds: 0
       maxRetries: 100
       minRetryIntervalSeconds: 0
+  parameters:
+  - name: "parallel_shard_count"
+    default: "4"
+  - name: "parallel_shard_ids"
+    default: "0,1,2,3"
+  - name: "parallel_batch_count"
+    default: "5"
+  - name: "table_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/store_recommender_v2/mmc/config/table_config.json"
+  - name: "infer_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/store_recommender_v2/mmc/config/infer_config.json"
+  - name: "model_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/store_recommender_v2/mmc/config/model_config.json"
+  - name: "parallel_shard_id_base"
+    default: "0"
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

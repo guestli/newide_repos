@@ -93,6 +93,30 @@ spec:
       - name: "Ranking"
         dependencyConditions:
         - "succeeded"
+  parameters:
+  - name: "geo_retriever_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/i2i_retriever_config.json"
+  - name: "parallel_shard_count"
+    default: "5"
+  - name: "parallel_shard_ids"
+    default: "0,1,2,3,4"
+  - name: "parallel_batch_count"
+    default: "5"
+  - name: "data_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/oneapp_content_recommender/data_config.current.json"
+  - name: "i2i_retriever_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/i2i_retriever_config.json"
+  - name: "follower_retriever_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/follower_retriever_config.json"
+  - name: "ranker_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/oneapp_content_recommender/ranker_config.tuned.json"
+  - name: "parallel_shard_id_base"
+    default: "0"
+  - name: "two_tower_retriever_config_path"
+    default: "/Volumes/conf/dmpoff/vol_offdmp_adf_mnt_common_adls2/content_recommender/oneapp_content_recommender/two_tower_retriever_config.tuned.json"
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

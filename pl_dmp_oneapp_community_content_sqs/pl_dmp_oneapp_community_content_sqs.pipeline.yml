@@ -38,6 +38,13 @@ spec:
       timeoutSeconds: 0
       maxRetries: 100
       minRetryIntervalSeconds: 0
+  parameters:
+  - name: "Mode"
+    default: "Print"
+  - name: "Profile"
+    default: "Dev"
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

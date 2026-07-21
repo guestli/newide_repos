@@ -220,6 +220,9 @@ spec:
       - name: "fit_and_predict_lpo"
         dependencyConditions:
         - "succeeded"
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

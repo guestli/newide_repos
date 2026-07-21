@@ -84,6 +84,22 @@ spec:
       - name: "Ranking"
         dependencyConditions:
         - "succeeded"
+  parameters:
+  - name: "geo_retriever_config_path"
+    default: ""
+  - name: "data_config_path"
+    default: ""
+  - name: "i2i_retriever_config_path"
+    default: ""
+  - name: "follower_retriever_config_path"
+    default: ""
+  - name: "ranker_config_path"
+    default: ""
+  - name: "two_tower_retriever_config_path"
+    default: ""
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:

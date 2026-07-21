@@ -360,6 +360,16 @@ spec:
       timeoutSeconds: 0
       maxRetries: 100
       minRetryIntervalSeconds: 0
+  parameters:
+  - name: "data_config_path"
+    default: ""
+  - name: "run_date"
+    default: ""
+  - name: "two_tower_retriever_config_path"
+    default: ""
+  variables:
+  - name: "run_date"
+    default: ""
   schedulingResourceGroupName: "exclusive_schedule"
   schedulingResourceGroupId: 1302
   dependsOn:
