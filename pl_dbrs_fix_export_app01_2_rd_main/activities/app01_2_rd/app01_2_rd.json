@@ -1,0 +1,42 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "azuredatabricksdeltalake",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_dbrs_infra_05",
+        "dataSourceName" : "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_dbrs_infra_05",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "azuredatabricksdeltalake"
+      }
+    },
+    "writer" : {
+      "type" : "azureblobstorage",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_ablb_infra_01",
+        "dataSourceName" : "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_ablb_infra_01",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ ],
+        "connectorType" : "azureblobstorage"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

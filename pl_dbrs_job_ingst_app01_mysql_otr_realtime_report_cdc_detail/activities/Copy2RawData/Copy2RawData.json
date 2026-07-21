@@ -1,0 +1,42 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "azuremysql",
+      "parameter" : {
+        "dataSourceId" : "ls_mysql_app01_otr_realtime_report_cdc",
+        "dataSourceName" : "ls_mysql_app01_otr_realtime_report_cdc",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "azuremysql"
+      }
+    },
+    "writer" : {
+      "type" : "azureblobfs",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_job_ingst_otrplus_main7_support_live_sanitized__ls_adl2_infra_01",
+        "dataSourceName" : "pl_dbrs_job_ingst_otrplus_main7_support_live_sanitized__ls_adl2_infra_01",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ ],
+        "connectorType" : "azureblobfs"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

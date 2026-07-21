@@ -1,0 +1,120 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "9d838c23d7f882f0b4d2ec536dc4475f"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_psql_modelb_product_service_detail"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "StartLogRecord"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_app01_psql_modelb_product_service_detail/activities/StartLogRecord/StartLogRecord.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@or(equals(pipeline().TriggerType,'Manual'),equals(pipeline().parameters.IsParentPipelineManualTrigger,'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', pipeline().parameters.TableName)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@pipeline().parameters.TableName"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "ecommerce2rw"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_app01_psql_modelb_product_service_detail/activities/ecommerce2rw/ecommerce2rw.json"
+    dependsOn:
+      activities:
+      - name: "RowDataCount"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "RowDataCount"
+    type: "look_up"
+    dataSource: "ls_psql_app01_modelb_product_service"
+    table: "ds_src_dbrs_uc_app01_psql_modelb_product_service"
+    dependsOn:
+      activities:
+      - name: "StartLogRecord"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 43200
+  parameters:
+  - name: "DatabaseName"
+    default: "rawdata_app01"
+  - name: "TableName"
+    default: "rw_srvc_app01_datalake_promotion"
+  - name: "PartitionID"
+    default: "2023-03-29"
+  - name: "LogEnabled"
+    default: "1"
+  - name: "IsParentPipelineManualTrigger"
+    default: "Manual"
+  - name: "select_sql"
+    default: "SELECT REPLACE(REPLACE(id,CHR(10),''),CHR(13),'') as id,REPLACE(REPLACE(dealer_code,CHR(10),''),CHR(13),'')\
+      \ as dealer_code,REPLACE(REPLACE(dealer_name,CHR(10),''),CHR(13),'') as dealer_name,REPLACE(REPLACE(region,CHR(10),''),CHR(13),'')\
+      \ as region,REPLACE(REPLACE(group_name,CHR(10),''),CHR(13),'') as group_name,target_man_day,annual_recharge_amount,surplus_amount,total_achieved_man_day,achieved_man_day_c1_f2f,achieved_man_day_c2_f2f,achieved_man_day_c1_cg,achieved_man_day_c2_cg,achieved_man_day_c1_vc,achieved_man_day_c2_vc,no_record_c1_f2f,no_record_c2_f2f,no_record_c1_cg,no_record_c2_cg,no_record_c1_vc,no_record_c2_vc,not_deliverred_c1_f2f,not_deliverred_c2_f2f,not_deliverred_c1_cg,not_deliverred_c2_cg,not_deliverred_c1_vc,not_deliverred_c2_vc,handle_time,create_time\
+      \ , '2023-03-30 11:29:43' last_mdf_dt from target_assessment_statistics T where\
+      \  handle_time = '2023-03-29'"
+  - name: "SQLFrom"
+    default: "from target_assessment_statistics"
+  - name: "SQLWhere"
+    default: "handle_time = '2023-03-29'"
+  - name: "pl_name"
+    default: ""
+  variables:
+  - name: "JobNameVar"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

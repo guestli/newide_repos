@@ -1,0 +1,28 @@
+{
+  "name" : "Remove Log",
+  "type" : "AzureFunctionActivity",
+  "dependsOn" : [ {
+    "activity" : "Add Column",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "functionName" : "ProcessTarResultFunc",
+    "body" : {
+      "Operation" : "Remove",
+      "RequestID" : "@activity('Add Column').output.RequestID"
+    },
+    "method" : "POST"
+  },
+  "linkedServiceName" : {
+    "referenceName" : "ls_afun_infra_02",
+    "type" : "LinkedServiceReference"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "name" : "Stop SqlServerStoredProcedure",
+  "type" : "SqlServerStoredProcedure",
+  "dependsOn" : [ {
+    "activity" : "BLM2Blob_success",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "storedProcedureName" : "[dbo].[usp_pl_exp_StopDatabricksLogRecording]",
+    "storedProcedureParameters" : {
+      "pl_name" : {
+        "value" : {
+          "value" : "@concat(pipeline().Pipeline,'_',pipeline().RunId)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "enabled" : {
+        "value" : {
+          "value" : "@pipeline().parameters.LogEnabled",
+          "type" : "Expression"
+        },
+        "type" : "Int32"
+      },
+      "job_name" : {
+        "value" : "exp_app01_2_rd",
+        "type" : "String"
+      }
+    }
+  },
+  "linkedServiceName" : {
+    "referenceName" : "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_asql_infra_04",
+    "type" : "LinkedServiceReference"
+  }
+}

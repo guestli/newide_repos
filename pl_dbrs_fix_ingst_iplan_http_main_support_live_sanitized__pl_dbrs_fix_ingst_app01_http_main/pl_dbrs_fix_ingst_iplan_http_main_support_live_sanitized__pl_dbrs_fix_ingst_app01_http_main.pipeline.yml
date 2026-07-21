@@ -1,0 +1,143 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "50d3bc6e8552bd022e63f15ad1d5b643"
+spec:
+  displayName: "pl_dbrs_fix_ingst_iplan_http_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_http_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 1 * * ?"
+    priority: "d5"
+  activities:
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_iplan_http_main_support_live_sanitized__ls_asql_infra_03"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "GetPartitionID"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 604800
+  - name: "GetPartitionID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "partition_id"
+    value:
+      rawValue: "@if(equals(pipeline().parameters.PartitionID,'0'),formatDateTime(addhours(utcnow(),8),\
+        \ 'yyyy-MM-dd'),pipeline().parameters.PartitionID)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "IterateEachJob"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 3
+    activities:
+    - name: "pl_dbrs_fix_ingst_app01_http_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_iplan_http_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_http_detail"
+      pipelineId: "168143287cf39e8d5b7fc53e092d035f"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        LogEnabled: ""
+        url_params: ""
+        partition_id: ""
+        DatabaseName: ""
+        TableName: ""
+        MainPipelineTriggerType: ""
+        mapping: ""
+        is_header: ""
+        storage_account: ""
+        src_level_name: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Env"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "Env"
+    value:
+      rawValue: "@pipeline().globalParameters.Environment"
+    outputVariables: []
+  - name: "If_Condition1"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "{{pipeline.vars.Env}}"
+      op: "EQUAL_TO"
+      right: "INT"
+    dependsOn:
+      activities:
+      - name: "Env"
+        dependencyConditions:
+        - "succeeded"
+  - name: "storage_account_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "storage_account_prod"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  parameters:
+  - name: "LogEnabled"
+    default: "1"
+  - name: "TableName"
+    default: "ALL"
+  - name: "PartitionID"
+    default: "0"
+  - name: "is_header"
+    default: "False"
+  variables:
+  - name: "partition_id"
+    default: ""
+  - name: "JobNameVar"
+    default: ""
+  - name: "Env"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

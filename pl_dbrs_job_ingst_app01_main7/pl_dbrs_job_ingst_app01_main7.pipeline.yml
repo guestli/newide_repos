@@ -1,0 +1,234 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "ce1f7b709d5daa3f3f6226ddce95b756"
+spec:
+  displayName: "pl_dbrs_job_ingst_app01_main7"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 0/1 * * ?"
+    priority: "d5"
+  activities:
+  - name: "SetPartitionID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@formatDateTime(addhours(utcnow(),8),'yyyy-MM-dd')"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Set_table_list"
+        dependencyConditions:
+        - "succeeded"
+  - name: "SetStartDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "StartDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.pStartDate), concat(formatDateTime(addhours(utcnow(),\
+        \ -40), 'yyyy-MM-dd'), 'T16:00:00.000Z'), pipeline().parameters.pStartDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetPartitionID"
+        dependencyConditions:
+        - "succeeded"
+  - name: "SetEndDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "EndDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.pEndDate), concat(formatDateTime(addhours(utcnow(),\
+        \ -16), 'yyyy-MM-dd'), 'T16:00:00.000Z'), pipeline().parameters.pEndDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetStartDate"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Notebook1"
+    type: "notebook"
+    description: "A new Notebook job"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_ingst_app01_main7/activities/Notebook1/Notebook1.ipynb"
+    kernelType: "emr_serverless_spark_python"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1012
+    sparkConf: []
+    executeParam:
+      image:
+        imageUrl: ""
+    parameters: []
+    resources: []
+    dependsOn:
+      activities:
+      - name: "pl_dbrs_job_ingst_app01_mysql_otr_realtime_report_cdc_main"
+        dependencyConditions:
+        - "completed"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 300000
+      timeoutSeconds: 43200
+  - name: "Env"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "Env"
+    value:
+      rawValue: "@pipeline().globalParameters.Environment"
+    outputVariables: []
+  - name: "If_Condition1"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "{{pipeline.vars.Env}}"
+      op: "EQUAL_TO"
+      right: "INT"
+    dependsOn:
+      activities:
+      - name: "Env"
+        dependencyConditions:
+        - "succeeded"
+  - name: "container_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "dir_prefix"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "storage_account_INT"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "container_INT"
+        dependencyConditions:
+        - "succeeded"
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "container_PROD"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "dir_prefix"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "storage_account_PROD"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "storage_account"
+    value:
+      rawValue: "<<REDACTED>>"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "container_PROD"
+        dependencyConditions:
+        - "succeeded"
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "pl_dbrs_job_ingst_app01_mysql_otr_realtime_report_cdc_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_job_ingst_app01_mysql_otr_realtime_report_cdc_main"
+    pipelineId: "5ee96039b40eb20ce3079839b61e8ed6"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      pStartDate: ""
+      pEndDate: ""
+      logEnabled: ""
+      PartitionID: ""
+      pl_name: ""
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "SetEndDate"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Set_table_list"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "table_list"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.pTableList), 'source_table_1,source_table_2,source_table_3,source_table_4,source_table_5,source_table_6,source_table_7,source_table_8,source_table_9,source_table_10,source_table_11,source_table_12,source_table_13,source_table_14',\
+        \ pipeline().parameters.pTableList)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "If_Condition1"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  parameters:
+  - name: "pStartDate"
+    default: ""
+  - name: "pEndDate"
+    default: ""
+  - name: "logEnabled"
+    default: "1"
+  - name: "pTableList"
+    default: ""
+  - name: "system_name"
+    default: "<<REDACTED>>"
+  - name: "is_header"
+    default: "False"
+  variables:
+  - name: "PartitionID"
+    default: ""
+  - name: "StartDate"
+    default: ""
+  - name: "EndDate"
+    default: ""
+  - name: "Env"
+    default: ""
+  - name: "dir_prefix"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  - name: "FMinId"
+    default: ""
+  - name: "DataSourceSql"
+    default: ""
+  - name: "table_list"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

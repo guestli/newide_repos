@@ -1,0 +1,76 @@
+{
+  "name" : "LogLandingZone2Hive",
+  "type" : "SqlServerStoredProcedure",
+  "dependsOn" : [ {
+    "activity" : "nbis2hive",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "storedProcedureName" : "[dbo].[usp_SetDatabricksActivityCompletedLog]",
+    "storedProcedureParameters" : {
+      "enabled" : {
+        "value" : {
+          "value" : "@pipeline().parameters.LogEnabled",
+          "type" : "Expression"
+        },
+        "type" : "Byte"
+      },
+      "hive_count" : {
+        "value" : "0",
+        "type" : "Int32"
+      },
+      "isCopyDataActivity" : {
+        "value" : "1",
+        "type" : "Byte"
+      },
+      "job_status" : {
+        "value" : "success",
+        "type" : "String"
+      },
+      "msg_cd" : {
+        "value" : null,
+        "type" : "String"
+      },
+      "msg_info" : {
+        "value" : {
+          "value" : "@string(activity('nbis2hive').output)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "pl_name" : {
+        "value" : {
+          "value" : "@concat(pipeline().Pipeline,'_',pipeline().RunId)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "rows_read" : {
+        "value" : {
+          "value" : "@activity('nbis2hive').output.rowsRead",
+          "type" : "Expression"
+        },
+        "type" : "Int32"
+      },
+      "rows_write" : {
+        "value" : {
+          "value" : "@activity('nbis2hive').output.rowsCopied",
+          "type" : "Expression"
+        },
+        "type" : "Int32"
+      }
+    }
+  },
+  "linkedServiceName" : {
+    "referenceName" : "pl_dbrs_fix_ingst_nbis_asql_evt_main1_support_live_sanitized__ls_asql_infra_05",
+    "type" : "LinkedServiceReference"
+  }
+}

@@ -1,0 +1,107 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "130e9e7cca29ada0cc6b6fcb3404141d"
+spec:
+  displayName: "pl_dbrs_fix_ingst_tireo2opost_main_support_live_sanitized__pl_dbrs_fix_ingst_app01_detail"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_tireo2opost_main_support_live_sanitized__ls_asql_infra_03"
+    table: "pl_dbrs_fix_ingst_tireo2opost_main_support_live_sanitized__ds_asql_conf_environment"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "source2raw"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 1
+    activities:
+    - name: "CountGreaterZero"
+      type: "if_condition"
+      description: "Conditional execution"
+      condition:
+        type: "BINARY_OP"
+        left: "{{activity('SourceTableCount').output.firstrow.cnt}}"
+        op: "GREATER_THAN"
+        right: "0"
+    - name: "pl_dbrs_fix_ingst_app01_even_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_app01_even_detail"
+      pipelineId: "30d7c2a8501f9333840b63bd7e0df583"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        TableName: ""
+        pt: ""
+        LogEnabled: ""
+        database_name: ""
+        stg_table: ""
+        root_path_item: ""
+        table_type: ""
+        primary_key: ""
+        cols_dict_header: ""
+        cols_dict_item: ""
+        raw2lake_script: ""
+        raw_count_script: ""
+        lake_count_script: ""
+        mode: ""
+        source_select: ""
+        ds_type: ""
+        stg2raw_script: ""
+        MainPipelineTriggerType: ""
+        is_header: ""
+        storage_account: ""
+        database_name_uc: ""
+      waitingSuccess: true
+      dependsOn:
+        activities:
+        - name: "CountGreaterZero"
+          dependencyConditions:
+          - "succeeded"
+          outcome: true
+    - name: "SourceTableCount"
+      type: "look_up"
+      dataSource: "pl_dbrs_fix_ingst_tireo2opost_main_support_live_sanitized__ls_dbrs_infra_04"
+      table: "{value=@dataset().tab_name, type=Expression}"
+      retryPolicy:
+        maxRetries: 3
+        minRetryIntervalMillis: 300000
+        timeoutSeconds: 43200
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "tables"
+    default: "ALL"
+  - name: "pt"
+    default: ""
+  - name: "LogEnabled"
+    default: ""
+  - name: "MainPipelineTriggerType"
+    default: ""
+  - name: "DatabaseName"
+    default: ""
+  - name: "TableName"
+    default: ""
+  - name: "is_header"
+    default: ""
+  - name: "dir_prefix"
+    default: ""
+  - name: "storage_account"
+    default: ""
+  variables:
+  - name: "logInRunningLogAsSubPipeline"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

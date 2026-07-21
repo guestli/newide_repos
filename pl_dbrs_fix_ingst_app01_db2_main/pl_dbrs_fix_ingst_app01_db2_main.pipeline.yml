@@ -1,0 +1,141 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "46108c8a71184fae1ea4b55575ec60d6"
+spec:
+  displayName: "pl_dbrs_fix_ingst_app01_db2_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 16 * * ?"
+    priority: "d5"
+  activities:
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_ingst_vedoc_db2_main_support_live_sanitized__ls_asql_infra_04"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "SetEndDate"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 43200
+  - name: "Set_Partition_ID_By_Date"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.PartitionID), formatDateTime(addhours(utcnow(),8),'yyyy-MM-dd'),\
+        \ pipeline().parameters.PartitionID)"
+    outputVariables: []
+  - name: "ForEach1"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 5
+    activities:
+    - name: "pl_dbrs_fix_ingst_app01_db2_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_ingst_app01_db2_detail"
+      pipelineId: "db0abe7ce80335ca5f165e9c2590e887"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        LogEnabled: ""
+        TableName: ""
+        PartitionID: ""
+        is_header: ""
+        StagingContainer: ""
+        StagingDir: ""
+        StagingFile: ""
+        RwDB: ""
+        SourceTable: ""
+        SelectSql: ""
+        StorageAccount: ""
+        MainPipelineTriggerType: ""
+        src_level_name: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  - name: "SetStartDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "StartDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.StartDate), concat(formatDateTime(adddays(variables('PartitionID'),-4),\
+        \ 'yyyy-MM-dd'), ' 16:00:00.000000'), pipeline().parameters.StartDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Set_Partition_ID_By_Date"
+        dependencyConditions:
+        - "succeeded"
+  - name: "SetEndDate"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "EndDate"
+    value:
+      rawValue: "@if(empty(pipeline().parameters.EndDate), concat(formatDateTime(adddays(variables('PartitionID'),-3),\
+        \ 'yyyy-MM-dd'), ' 16:00:00.000000'), pipeline().parameters.EndDate)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "SetStartDate"
+        dependencyConditions:
+        - "succeeded"
+  - name: "pl_dbrs_fix_export_app01_2_rd_main"
+    type: "execute_pipeline"
+    pipelineName: "pl_dbrs_fix_export_app01_2_rd_main"
+    pipelineId: "5b39ff508b8a575aa1ca800b9f23eac7"
+    projectId: "10926"
+    bizDate: "${DATE}"
+    pipelineParameterValues:
+      LogEnabled: ""
+      partition_date: ""
+      DatabaseName: "app01_2_rd"
+      TableName: "exp_app01_2_rd"
+      MainPipelineTriggerType: ""
+    waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "ForEach1"
+        dependencyConditions:
+        - "succeeded"
+  parameters:
+  - name: "LogEnabled"
+    default: "1"
+  - name: "TableName"
+    default: "ALL"
+  - name: "PartitionID"
+    default: ""
+  - name: "is_header"
+    default: "True"
+  - name: "StartDate"
+    default: ""
+  - name: "EndDate"
+    default: ""
+  variables:
+  - name: "PartitionID"
+    default: ""
+  - name: "StartDate"
+    default: ""
+  - name: "EndDate"
+    default: ""
+  - name: "JobNameVar"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

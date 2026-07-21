@@ -1,0 +1,69 @@
+{
+  "name" : "Copy to Landing Zone Fail",
+  "type" : "SqlServerStoredProcedure",
+  "dependsOn" : [ {
+    "activity" : "Copy_media2Landingzone",
+    "dependencyConditions" : [ "Failed" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "storedProcedureName" : "[dbo].[usp_SetDatabricksActivityCompletedLog]",
+    "storedProcedureParameters" : {
+      "isCopyDataActivity" : {
+        "value" : "1",
+        "type" : "Byte"
+      },
+      "job_status" : {
+        "value" : "fail",
+        "type" : "String"
+      },
+      "msg_cd" : {
+        "value" : {
+          "value" : "@activity('Copy_media2Landingzone').Error.errorCode",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "msg_info" : {
+        "value" : {
+          "value" : "@activity('Copy_media2Landingzone').Error.message",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "pl_name" : {
+        "value" : {
+          "value" : "@concat(pipeline().Pipeline,'_',pipeline().RunId)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "rows_read" : {
+        "value" : null,
+        "type" : "Int32"
+      },
+      "rows_write" : {
+        "value" : null,
+        "type" : "Int32"
+      },
+      "enabled" : {
+        "value" : {
+          "value" : "@pipeline().parameters.LogEnabled",
+          "type" : "Expression"
+        },
+        "type" : "Int32"
+      }
+    }
+  },
+  "linkedServiceName" : {
+    "referenceName" : "pl_dbrs_fix_ingst_media_blob_main_support_live_sanitized__ls_asql_infra_05",
+    "type" : "LinkedServiceReference"
+  }
+}

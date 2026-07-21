@@ -1,0 +1,42 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "postgresqlv2",
+      "parameter" : {
+        "dataSourceId" : "ls_psql_app01o2o_servicemall_product_new",
+        "dataSourceName" : "ls_psql_app01o2o_servicemall_product_new",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "postgresqlv2"
+      }
+    },
+    "writer" : {
+      "type" : "azureblobfs",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__ls_adl2_infra_02",
+        "dataSourceName" : "pl_dbrs_job_ingst_tire_main2_support_live_sanitized__ls_adl2_infra_02",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ ],
+        "connectorType" : "azureblobfs"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

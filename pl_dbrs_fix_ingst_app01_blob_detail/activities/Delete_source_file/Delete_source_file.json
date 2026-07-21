@@ -1,0 +1,38 @@
+{
+  "name" : "Delete source file",
+  "type" : "Delete",
+  "dependsOn" : [ {
+    "activity" : "Copy_Landingzone2Hive",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "0.12:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "dataset" : {
+      "referenceName" : "ds_src_sftp_app01_files",
+      "type" : "DatasetReference",
+      "parameters" : {
+        "File" : {
+          "value" : "@pipeline().parameters.File",
+          "type" : "Expression"
+        },
+        "containers" : {
+          "value" : "@pipeline().parameters.containers",
+          "type" : "Expression"
+        }
+      }
+    },
+    "enableLogging" : false,
+    "storeSettings" : {
+      "type" : "AzureBlobStorageReadSettings",
+      "recursive" : false,
+      "enablePartitionDiscovery" : false
+    }
+  }
+}

@@ -1,0 +1,181 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "088bf6295526d93a729ce7a5d7d7d4d0"
+spec:
+  displayName: "pl_dbrs_fix_app01_ddq_main"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "SCHEDULED"
+    pauseStatus: "UNPAUSED"
+    frequency: "daily"
+    cronExpression: "0 0 22 * * ?"
+    priority: "d5"
+  activities:
+  - name: "Copy_data1"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_app01_ddq_main/activities/Copy_data1/Copy_data1.json"
+    dependsOn:
+      activities:
+      - name: "SetPartitionID"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "SetPartitionID"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "PartitionID"
+    value:
+      rawValue: "@if(equals(pipeline().parameters.PartitionID,'0'),formatDateTime(addhours(utcnow(),\
+        \ 8), 'yyyy-MM-dd'),pipeline().parameters.PartitionID)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "Env"
+        dependencyConditions:
+        - "succeeded"
+  - name: "GetJobList"
+    type: "look_up"
+    dataSource: "pl_dbrs_fix_aqua_ddq_main_support_live_sanitized__ls_asql_infra_03"
+    table: "<<REDACTED>>"
+    dependsOn:
+      activities:
+      - name: "ForEach2"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "ForEach1"
+    type: "for_each"
+    items: "@activity('GetJobList').output.value"
+    concurrency: 5
+    activities:
+    - name: "pl_dbrs_fix_app01_ddq_detail"
+      type: "execute_pipeline"
+      pipelineName: "pl_dbrs_fix_app01_ddq_detail"
+      pipelineId: "aa7c4354bf05f6b26e87e1b89bd5221a"
+      projectId: "10926"
+      bizDate: "${DATE}"
+      pipelineParameterValues:
+        MainPipelineTriggerType: ""
+        LogEnabled: "1"
+        DatabaseName: ""
+        PartitionID: ""
+        dir_prefix: ""
+        FileName: ""
+        TableName: ""
+        data_location: ""
+        select_column: ""
+        env: ""
+      waitingSuccess: true
+    dependsOn:
+      activities:
+      - name: "GetJobList"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Delete1"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_app01_ddq_main/activities/Delete1/Delete1.json"
+    dependsOn:
+      activities:
+      - name: "ForEach1"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 43200
+  - name: "Get_Metadata1"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_fix_app01_ddq_main/activities/Get_Metadata1/Get_Metadata1.json"
+    dependsOn:
+      activities:
+      - name: "Copy_data1"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 43200
+  - name: "ForEach2"
+    type: "for_each"
+    items: "@activity('Get Metadata1').output.childItems"
+    concurrency: 3
+    activities:
+    - name: "If_Condition1"
+      type: "if_condition"
+      description: "Conditional execution"
+      condition:
+        type: "BINARY_OP"
+        left: "@and(endswith(item().name,'.tar'),contains(item().name,pipeline().parameters.src_type))"
+        op: "EQUAL_TO"
+        right: "true"
+    - name: "tar"
+      type: "notebook"
+      description: "A new Notebook job"
+      source: "WORKSPACE"
+      path: "/Workspace/libopeng_folder/pl_dbrs_fix_app01_ddq_main/activities/tar/tar.ipynb"
+      kernelType: "emr_serverless_spark_python"
+      engineQueue: "公共队列-Default"
+      computingResourceGroupName: "public_compute"
+      computingResourceGroupId: 1012
+      sparkConf: []
+      executeParam:
+        image:
+          imageUrl: ""
+      parameters: []
+      resources: []
+      dependsOn:
+        activities:
+        - name: "If_Condition1"
+          dependencyConditions:
+          - "succeeded"
+          outcome: true
+      retryPolicy:
+        maxRetries: 0
+        minRetryIntervalMillis: 30000
+        timeoutSeconds: 43200
+    dependsOn:
+      activities:
+      - name: "Get_Metadata1"
+        dependencyConditions:
+        - "succeeded"
+  - name: "Env"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "env"
+    value:
+      rawValue: "@pipeline().globalParameters.Environment"
+    outputVariables: []
+  parameters:
+  - name: "PartitionID"
+    default: "0"
+  - name: "src_type"
+    default: "ddq/ddq_ees/ddq_vehicle/ddq_xd"
+  - name: "table_list"
+    default: "ALL"
+  variables:
+  - name: "PartitionID"
+    default: ""
+  - name: "FileSurfix"
+    default: ""
+  - name: "env"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false

@@ -1,0 +1,74 @@
+{
+  "name" : "StartLogRecord",
+  "type" : "SqlServerStoredProcedure",
+  "dependsOn" : [ {
+    "activity" : "If Condition1",
+    "dependencyConditions" : [ "Succeeded" ]
+  } ],
+  "policy" : {
+    "timeout" : "7.00:00:00",
+    "retry" : 0,
+    "retryIntervalInSeconds" : 30,
+    "secureOutput" : false,
+    "secureInput" : false
+  },
+  "userProperties" : [ ],
+  "typeProperties" : {
+    "storedProcedureName" : "[dbo].[usp_StartDatabricksLogRecording]",
+    "storedProcedureParameters" : {
+      "enabled" : {
+        "value" : {
+          "value" : "@pipeline().parameters.LogEnabled",
+          "type" : "Expression"
+        },
+        "type" : "Byte"
+      },
+      "job_dep_name" : {
+        "value" : {
+          "value" : "source_table_1,source_table_2",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "job_name" : {
+        "value" : {
+          "value" : "@variables('JobNameVar')",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "level_name" : {
+        "value" : {
+          "value" : "bz_cn_dl.datalake_app01",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "partition_date" : {
+        "value" : {
+          "value" : "@pipeline().parameters.partition_id",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "pl_name" : {
+        "value" : {
+          "value" : "@concat(pipeline().Pipeline,'_',pipeline().RunId)",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      },
+      "src_level_name" : {
+        "value" : {
+          "value" : "bz_cn_dl.datalake_app01",
+          "type" : "Expression"
+        },
+        "type" : "String"
+      }
+    }
+  },
+  "linkedServiceName" : {
+    "referenceName" : "pl_dbrs_fix_ingst_salesforce_psql_main_support_live_sanitized__ls_asql_infra_03",
+    "type" : "LinkedServiceReference"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "configuration" : {
+    "reader" : {
+      "type" : "azureblobstorage",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_fix_ingst_rtm_file_main_support_live_sanitized__ls_ablb_infra_01",
+        "dataSourceName" : "pl_dbrs_fix_ingst_rtm_file_main_support_live_sanitized__ls_ablb_infra_01",
+        "splitKeys" : [ ],
+        "multiplePartitionList" : [ ],
+        "columns" : [ ],
+        "templateParam" : { },
+        "connectorType" : "azureblobstorage"
+      }
+    },
+    "writer" : {
+      "type" : "sql_server",
+      "parameter" : {
+        "dataSourceId" : "pl_dbrs_fix_ingst_rtm_file_main_support_live_sanitized__ls_asql_infra_04",
+        "dataSourceName" : "pl_dbrs_fix_ingst_rtm_file_main_support_live_sanitized__ls_asql_infra_04",
+        "schemaName" : "app01_alarm",
+        "postSqls" : "",
+        "preSqls" : "",
+        "writeMode" : "directlyInsert",
+        "columns" : [ ],
+        "connectorType" : "sql_server"
+      }
+    },
+    "operator" : {
+      "parameter" : {
+        "expectedMaxParallelism" : 1,
+        "customParameters" : { },
+        "extendedParameters" : {
+          "mappingType" : "table_mapping"
+        },
+        "resourceGroup" : {
+          "resourceGroupId" : "1638",
+          "resourceGroupName" : "dts",
+          "resourceType" : "dts"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,130 @@
+apiVersion: "newide.studio.dataleap.volc/v1"
+kind: "Pipeline"
+metadata:
+  name: "f0238ff26e13555194b6c915c3941ade"
+spec:
+  displayName: "pl_dbrs_job_app01_psql_app01_push_service_detail"
+  description: "<<REDACTED>>"
+  runAs: "Account/2100052957"
+  trigger:
+    type: "MANUAL"
+  activities:
+  - name: "StartLogRecord"
+    type: "custom"
+    source: "WORKSPACE"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_app01_psql_app01_push_service_detail/activities/StartLogRecord/StartLogRecord.json"
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+    retryPolicy:
+      maxRetries: 0
+      minRetryIntervalMillis: 30000
+      timeoutSeconds: 604800
+  - name: "CheckTriggerType"
+    type: "if_condition"
+    description: "Conditional execution"
+    condition:
+      type: "BINARY_OP"
+      left: "@or(equals(pipeline().TriggerType,'Manual'),equals(pipeline().parameters.IsParentPipelineManualTrigger,'Manual'))"
+      op: "EQUAL_TO"
+      right: "true"
+  - name: "SetJobNameManual"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@concat('$M$_', pipeline().parameters.TableName)"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: true
+  - name: "SetJobNameAuto"
+    type: "set_variable"
+    description: "Set a pipeline variable"
+    variableType: "PIPELINE_INNER"
+    variableName: "JobNameVar"
+    value:
+      rawValue: "@pipeline().parameters.TableName"
+    outputVariables: []
+    dependsOn:
+      activities:
+      - name: "CheckTriggerType"
+        dependencyConditions:
+        - "succeeded"
+        outcome: false
+  - name: "ecommerce2rw"
+    type: "dts_batch"
+    description: "A new Copy Data job"
+    source: "WORKSPACE"
+    engineType: "dts_batch"
+    path: "/Workspace/libopeng_folder/pl_dbrs_job_app01_psql_app01_push_service_detail/activities/ecommerce2rw/ecommerce2rw.json"
+    dependsOn:
+      activities:
+      - name: "RowDataCount"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 3
+      minRetryIntervalMillis: 600000
+      timeoutSeconds: 10800
+  - name: "RowDataCount"
+    type: "look_up"
+    dataSource: "ls_psql_app01_app01_push_service"
+    table: "ds_src_psql_app01_app01_push_service"
+    dependsOn:
+      activities:
+      - name: "StartLogRecord"
+        dependencyConditions:
+        - "succeeded"
+    retryPolicy:
+      maxRetries: 2
+      minRetryIntervalMillis: 120000
+      timeoutSeconds: 43200
+  parameters:
+  - name: "DatabaseName"
+    default: "rawdata_app01"
+  - name: "TableName"
+    default: "rw_srvc_app01_t_sms_task"
+  - name: "PartitionID"
+    default: "2023-03-29"
+  - name: "LogEnabled"
+    default: "1"
+  - name: "IsParentPipelineManualTrigger"
+    default: "Manual"
+  - name: "select_sql"
+    default: "SELECT id,start_date,end_date,(start_time::timetz AT TIME ZONE 'Asia/Shanghai')::time\
+      \ as start_time,(end_time::timetz AT TIME ZONE 'Asia/Shanghai')::time as end_time,REPLACE(REPLACE(state,CHR(10),''),CHR(13),'')\
+      \ as state,created_time+'8H' as created_time,modified_time+'8H' as modified_time,REPLACE(REPLACE(template_code,CHR(10),''),CHR(13),'')\
+      \ as template_code,REPLACE(REPLACE(type,CHR(10),''),CHR(13),'') as type,REPLACE(REPLACE(template_content,CHR(10),''),CHR(13),'')\
+      \ as template_content,REPLACE(REPLACE(name,CHR(10),''),CHR(13),'') as name,delete_flag,REPLACE(REPLACE(channel,CHR(10),''),CHR(13),'')\
+      \ as channel,REPLACE(REPLACE(time_type,CHR(10),''),CHR(13),'') as time_type,total,REPLACE(REPLACE(code,CHR(10),''),CHR(13),'')\
+      \ as code,segment_id,REPLACE(REPLACE(segment_name,CHR(10),''),CHR(13),'') as\
+      \ segment_name,REPLACE(REPLACE(consumer_code,CHR(10),''),CHR(13),'') as consumer_code,success_count,completed_time+'8H'\
+      \ as completed_time,REPLACE(REPLACE(receive_type,CHR(10),''),CHR(13),'') as\
+      \ receive_type,regular_job_id,REPLACE(REPLACE(approval_status,CHR(10),''),CHR(13),'')\
+      \ as approval_status,submit_time+'8H' as submit_time,REPLACE(REPLACE(submitter,CHR(10),''),CHR(13),'')\
+      \ as submitter,REPLACE(REPLACE(msg_request_id,CHR(10),''),CHR(13),'') as msg_request_id,REPLACE(REPLACE(message_type,CHR(10),''),CHR(13),'')\
+      \ as message_type,LOCALTIMESTAMP+'8H' as last_mdf_dt from t_sms_task T where\
+      \   modified_time  >= '1901-01-01' and modified_time  < '2025-08-07T16:00:00.000Z'"
+  - name: "SQLFrom"
+    default: "from t_sms_task"
+  - name: "SQLWhere"
+    default: "modified_time  >= '1901-01-01' and modified_time  < '2025-08-07T16:00:00.000Z'"
+  - name: "pl_name"
+    default: ""
+  variables:
+  - name: "JobNameVar"
+    default: ""
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1009
+  dependsOn:
+    pipelines: []
+    self:
+      enabled: false
