@@ -18,7 +18,7 @@ spec:
     description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_data_update"
     pipelineId: "pl_dmp_oneapp_community_recommender_data_update"
-    projectId: "11026"
+    projectId: "101875"
     bizDate: "${DATE}"
     pipelineParameterValues:
       run_date: "{{pipeline.vars.run_date}}"
@@ -35,7 +35,7 @@ spec:
     description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_retrieval"
     pipelineId: "pl_dmp_oneapp_community_recommender_retrieval"
-    projectId: "11026"
+    projectId: "101875"
     bizDate: "${DATE}"
     pipelineParameterValues:
       run_date: "{{pipeline.vars.run_date}}"
@@ -56,7 +56,7 @@ spec:
     description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_ranking_parallel"
     pipelineId: "pl_dmp_oneapp_community_recommender_ranking_parallel"
-    projectId: "11026"
+    projectId: "101875"
     bizDate: "${DATE}"
     pipelineParameterValues:
       run_date: "{{pipeline.vars.run_date}}"
@@ -85,7 +85,7 @@ spec:
     description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_content_sqs"
     pipelineId: "pl_dmp_oneapp_community_content_sqs"
-    projectId: "11026"
+    projectId: "101875"
     bizDate: "${DATE}"
     pipelineParameterValues:
       Profile: "PROD"
@@ -121,8 +121,8 @@ spec:
   variables:
   - name: "run_date"
     default: ""
-  schedulingResourceGroupName: "exclusive_schedule"
-  schedulingResourceGroupId: 1302
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1008
   dependsOn:
     pipelines: []
     self:

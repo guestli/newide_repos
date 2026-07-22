@@ -30,17 +30,13 @@ spec:
       source: "WORKSPACE"
       path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Run_ranking_model_shard/Run_ranking_model_shard.ipynb"
       kernelType: "emr_serverless_spark_python"
-      engineQueue: "new_emr_queue_20260527140648-notebook_test"
-      computingResourceGroupName: "vke192"
-      computingResourceGroupId: 1099
-      sparkConf:
-      - key: "serverless.spark.access.key"
-        value: "{{ak}}"
-      - key: "serverless.spark.secret.key"
-        value: "{{sk}}"
+      engineQueue: "公共队列-Default"
+      computingResourceGroupName: "public_compute"
+      computingResourceGroupId: 1010
+      sparkConf: []
       executeParam:
         image:
-          imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+          imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
         cpuCores: 1
         memoryMb: 4096
       parameters:
@@ -86,17 +82,13 @@ spec:
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Merge_ranking_shards/Merge_ranking_shards.ipynb"
     kernelType: "emr_serverless_spark_python"
-    engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "vke192"
-    computingResourceGroupId: 1099
-    sparkConf:
-    - key: "serverless.spark.access.key"
-      value: "{{ak}}"
-    - key: "serverless.spark.secret.key"
-      value: "{{sk}}"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1010
+    sparkConf: []
     executeParam:
       image:
-        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+        imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
       cpuCores: 1
       memoryMb: 4096
     parameters: []
@@ -120,17 +112,13 @@ spec:
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Create_candidate_set/Create_candidate_set.ipynb"
     kernelType: "emr_serverless_spark_python"
-    engineQueue: "new_emr_queue_20260527140648-notebook_test"
-    computingResourceGroupName: "vke192"
-    computingResourceGroupId: 1099
-    sparkConf:
-    - key: "serverless.spark.access.key"
-      value: "{{ak}}"
-    - key: "serverless.spark.secret.key"
-      value: "{{sk}}"
+    engineQueue: "公共队列-Default"
+    computingResourceGroupName: "public_compute"
+    computingResourceGroupId: 1010
+    sparkConf: []
     executeParam:
       image:
-        imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
+        imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
       cpuCores: 1
       memoryMb: 4096
     parameters: []
@@ -168,8 +156,8 @@ spec:
   variables:
   - name: "run_date"
     default: ""
-  schedulingResourceGroupName: "exclusive_schedule"
-  schedulingResourceGroupId: 1302
+  schedulingResourceGroupName: "public_schedule"
+  schedulingResourceGroupId: 1008
   dependsOn:
     pipelines: []
     self:
