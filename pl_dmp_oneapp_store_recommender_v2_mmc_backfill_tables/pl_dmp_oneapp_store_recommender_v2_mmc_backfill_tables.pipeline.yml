@@ -33,7 +33,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_backfill_tables/activities/backfill_attribute_and_interaction_tables/backfill_attribute_and_interaction_tables.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -70,7 +70,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_backfill_tables/activities/backfill_feature_tables/backfill_feature_tables.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

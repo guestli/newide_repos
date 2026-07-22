@@ -31,7 +31,7 @@ spec:
       path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Run_ranking_model_shard/Run_ranking_model_shard.ipynb"
       kernelType: "emr_serverless_spark_python"
       engineQueue: "公共队列-Default"
-      computingResourceGroupName: "public_compute"
+      computingResourceGroupName: "公共计算资源组"
       computingResourceGroupId: 1010
       sparkConf:
       - key: "serverless.spark.access.key"
@@ -87,7 +87,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Merge_ranking_shards/Merge_ranking_shards.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -121,7 +121,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel/activities/Create_candidate_set/Create_candidate_set.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

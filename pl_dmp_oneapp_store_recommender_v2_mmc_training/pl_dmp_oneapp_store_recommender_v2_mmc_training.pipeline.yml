@@ -25,7 +25,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Transform_features/Transform_features.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -59,7 +59,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Prepare_model_data/Prepare_model_data.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -93,7 +93,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Train_model/Train_model.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

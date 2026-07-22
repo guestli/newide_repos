@@ -17,7 +17,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/oneapp_dmp_scroring_layer/oneapp_dmp_scroring_layer.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -61,7 +61,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/create_temp_table/create_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf: []
     executeParam:
@@ -91,7 +91,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/create_index_fro_temp_table/create_index_fro_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf: []
     executeParam:
@@ -121,7 +121,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_scroring_layer/activities/drop_and_sp_rename_temp_table/drop_and_sp_rename_temp_table.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf: []
     executeParam:

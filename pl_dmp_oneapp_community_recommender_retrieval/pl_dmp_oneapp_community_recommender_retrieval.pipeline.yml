@@ -25,7 +25,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Geolocation_retriever/Geolocation_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -59,7 +59,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Follower_retriever/Follower_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -93,7 +93,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Train_i2i_retriever/Train_i2i_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -127,7 +127,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/run_i2i_retriever/run_i2i_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -161,7 +161,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/train_two_tower_model/train_two_tower_model.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -195,7 +195,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Run_two_tower_model/Run_two_tower_model.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -229,7 +229,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Pool_retrieved_posts/Pool_retrieved_posts.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

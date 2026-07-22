@@ -17,7 +17,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_attributes/User_post_attributes.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -59,7 +59,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_dwell_time/User_post_dwell_time.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -93,7 +93,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_interaction/User_post_interaction.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -127,7 +127,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_geolocation_indexing/Post_geolocation_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -161,7 +161,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_follower_indexing/Post_follower_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -195,7 +195,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/media_item_indexing/media_item_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -229,7 +229,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_content/Post_content.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -263,7 +263,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_embedding/Post_embedding.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -297,7 +297,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Concatenate_bottom_features/Concatenate_bottom_features.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -334,7 +334,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Process_two_tower_data/Process_two_tower_data.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

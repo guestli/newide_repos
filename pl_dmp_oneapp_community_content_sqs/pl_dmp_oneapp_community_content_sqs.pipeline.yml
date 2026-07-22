@@ -17,7 +17,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_content_sqs/activities/Content_recommendation_to_SQS/Content_recommendation_to_SQS.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"

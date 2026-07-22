@@ -17,7 +17,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/tag_explode/tag_explode.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -46,7 +46,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/get_mmc_tags/get_mmc_tags.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
@@ -80,7 +80,7 @@ spec:
     path: "/Workspace/newide_repos/pl_dmp_daily_mmcstore_tag_explode/activities/delete_tags_from_segment_api/delete_tags_from_segment_api.ipynb"
     kernelType: "emr_serverless_spark_python"
     engineQueue: "公共队列-Default"
-    computingResourceGroupName: "public_compute"
+    computingResourceGroupName: "公共计算资源组"
     computingResourceGroupId: 1010
     sparkConf:
     - key: "serverless.spark.access.key"
