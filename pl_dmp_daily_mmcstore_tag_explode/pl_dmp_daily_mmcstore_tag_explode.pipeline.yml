@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "382bb7b571887b1a71078db025b7be0a"
+  name: "pl_dmp_daily_mmcstore_tag_explode"
 spec:
   displayName: "pl_dmp_daily_mmcstore_tag_explode"
   description: "18003fca-0000-4200-0000-69240f290000"

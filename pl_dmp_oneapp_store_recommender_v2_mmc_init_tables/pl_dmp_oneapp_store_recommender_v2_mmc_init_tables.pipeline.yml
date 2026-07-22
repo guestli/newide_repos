@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "c8898cad2ef0b51093e5b8913b641f0a"
+  name: "pl_dmp_oneapp_store_recommender_v2_mmc_init_tables"
 spec:
   displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_init_tables"
   description: "150019e3-0000-4200-0000-69ef2e4c0000"

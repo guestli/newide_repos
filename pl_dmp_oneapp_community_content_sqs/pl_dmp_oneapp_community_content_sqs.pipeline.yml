@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "863b7070d5d03d85fbdc4d039652db4b"
+  name: "pl_dmp_oneapp_community_content_sqs"
 spec:
   displayName: "pl_dmp_oneapp_community_content_sqs"
   description: "050094b5-0000-4200-0000-69e5d7440000"

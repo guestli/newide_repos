@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "1bc738649045603622a6b3ab8447d106"
+  name: "pl_dmp_oneapp_scroring_layer_v2"
 spec:
   displayName: "pl_dmp_oneapp_scroring_layer_v2"
   description: "15001ce3-0000-4200-0000-69ef2e4c0000"

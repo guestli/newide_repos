@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "1fb889b98ace5b59063c524fb6c89919"
+  name: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
 spec:
   displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
   description: "04001eb5-0000-4200-0000-69f18c970000"
@@ -12,7 +12,7 @@ spec:
   - name: "Extraction"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_data_update"
-    pipelineId: "0fb0d8568dd7069b5fc9e48c2c578956"
+    pipelineId: "pl_dmp_oneapp_store_recommender_v2_mmc_data_update"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -28,7 +28,7 @@ spec:
   - name: "Training"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_training"
-    pipelineId: "9dae5a5790857283d8c08fe62af38014"
+    pipelineId: "pl_dmp_oneapp_store_recommender_v2_mmc_training"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -44,7 +44,7 @@ spec:
   - name: "Inference"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel"
-    pipelineId: "8526520586ae32cb41aa0a6edb52463d"
+    pipelineId: "pl_dmp_oneapp_store_recommender_v2_mmc_inference_parallel"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -73,7 +73,7 @@ spec:
   - name: "pl_dmp_oneapp_scroring_layer_v2"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_scroring_layer_v2"
-    pipelineId: "1bc738649045603622a6b3ab8447d106"
+    pipelineId: "pl_dmp_oneapp_scroring_layer_v2"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:

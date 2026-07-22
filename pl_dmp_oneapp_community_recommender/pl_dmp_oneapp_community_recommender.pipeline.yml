@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "813c39c0ed1cf2b41a56c0aedb2fc1cc"
+  name: "pl_dmp_oneapp_community_recommender"
 spec:
   displayName: "pl_dmp_oneapp_community_recommender"
   description: "7b037d10-0000-4200-0000-69c30d330000"
@@ -12,7 +12,7 @@ spec:
   - name: "Extraction"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_data_update"
-    pipelineId: "17ea1949c4c10455d3dc97ddb6bfec82"
+    pipelineId: "pl_dmp_oneapp_community_recommender_data_update"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -28,7 +28,7 @@ spec:
   - name: "Retrieval"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_retrieval"
-    pipelineId: "1c0d44ea03554d9e481c1fa07c085c02"
+    pipelineId: "pl_dmp_oneapp_community_recommender_retrieval"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -47,7 +47,7 @@ spec:
   - name: "Ranking"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_ranking"
-    pipelineId: "22792d0ecd2a23231ab0910d55001266"
+    pipelineId: "pl_dmp_oneapp_community_recommender_ranking"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -71,7 +71,7 @@ spec:
   - name: "Content_to_SQS"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_community_content_sqs"
-    pipelineId: "863b7070d5d03d85fbdc4d039652db4b"
+    pipelineId: "pl_dmp_oneapp_community_content_sqs"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:

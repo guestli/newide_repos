@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "0fb0d8568dd7069b5fc9e48c2c578956"
+  name: "pl_dmp_oneapp_store_recommender_v2_mmc_data_update"
 spec:
   displayName: "pl_dmp_oneapp_store_recommender_v2_mmc_data_update"
   description: "150013e3-0000-4200-0000-69ef2e4c0000"

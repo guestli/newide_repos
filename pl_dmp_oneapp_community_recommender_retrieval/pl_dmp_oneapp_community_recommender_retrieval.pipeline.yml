@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "1c0d44ea03554d9e481c1fa07c085c02"
+  name: "pl_dmp_oneapp_community_recommender_retrieval"
 spec:
   displayName: "pl_dmp_oneapp_community_recommender_retrieval"
   description: "7b036510-0000-4200-0000-69c30d320000"

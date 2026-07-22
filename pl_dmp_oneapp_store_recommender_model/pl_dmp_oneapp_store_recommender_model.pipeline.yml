@@ -1,7 +1,7 @@
 apiVersion: "newide.studio.dataleap.volc/v1"
 kind: "Pipeline"
 metadata:
-  name: "2a6aee8683f07ea3faca82366cf5561b"
+  name: "pl_dmp_oneapp_store_recommender_model"
 spec:
   displayName: "pl_dmp_oneapp_store_recommender_model"
   description: "04002eb5-0000-4200-0000-69f18c980000"
@@ -197,7 +197,7 @@ spec:
   - name: "pl_dmp_oneapp_scroring_layer"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_scroring_layer"
-    pipelineId: "6441699cbf1a52d68ba296a82a218f70"
+    pipelineId: "pl_dmp_oneapp_scroring_layer"
     projectId: "11026"
     bizDate: "${DATE}"
     pipelineParameterValues:
@@ -211,7 +211,7 @@ spec:
   - name: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
     type: "execute_pipeline"
     pipelineName: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
-    pipelineId: "1fb889b98ace5b59063c524fb6c89919"
+    pipelineId: "pl_dmp_oneapp_store_recommender_v2_mmc_parallel"
     projectId: "11026"
     bizDate: "${DATE}"
     waitingSuccess: true
