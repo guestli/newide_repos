@@ -12,7 +12,7 @@ spec:
   activities:
   - name: "Set_run_date"
     type: "set_variable"
-    description: "Set a pipeline variable"
+    description: "Set a pipeline variable\nSource: platform=adf, activity type=SetVariable"
     variableType: "PIPELINE_INNER"
     variableName: "run_date"
     value:
@@ -20,7 +20,7 @@ spec:
     outputVariables: []
   - name: "Geolocation_retriever"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Geolocation_retriever/Geolocation_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -54,7 +54,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Follower_retriever"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Follower_retriever/Follower_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -88,7 +88,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Train_i2i_retriever"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Train_i2i_retriever/Train_i2i_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -122,7 +122,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "run_i2i_retriever"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/run_i2i_retriever/run_i2i_retriever.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -156,7 +156,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "train_two_tower_model"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/train_two_tower_model/train_two_tower_model.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -190,7 +190,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Run_two_tower_model"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Run_two_tower_model/Run_two_tower_model.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -224,7 +224,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Pool_retrieved_posts"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_retrieval/activities/Pool_retrieved_posts/Pool_retrieved_posts.ipynb"
     kernelType: "emr_serverless_spark_python"

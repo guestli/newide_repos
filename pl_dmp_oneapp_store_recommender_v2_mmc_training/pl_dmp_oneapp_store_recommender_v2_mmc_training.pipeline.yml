@@ -12,7 +12,7 @@ spec:
   activities:
   - name: "Set_run_date"
     type: "set_variable"
-    description: "Set a pipeline variable"
+    description: "Set a pipeline variable\nSource: platform=adf, activity type=SetVariable"
     variableType: "PIPELINE_INNER"
     variableName: "run_date"
     value:
@@ -20,7 +20,7 @@ spec:
     outputVariables: []
   - name: "Transform_features"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Transform_features/Transform_features.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -54,7 +54,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Prepare_model_data"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Prepare_model_data/Prepare_model_data.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -88,7 +88,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Train_model"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_training/activities/Train_model/Train_model.ipynb"
     kernelType: "emr_serverless_spark_python"

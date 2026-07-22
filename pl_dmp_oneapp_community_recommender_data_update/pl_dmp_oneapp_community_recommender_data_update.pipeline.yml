@@ -12,7 +12,7 @@ spec:
   activities:
   - name: "User_post_attributes"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_attributes/User_post_attributes.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -46,7 +46,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Set_run_date"
     type: "set_variable"
-    description: "Set a pipeline variable"
+    description: "Set a pipeline variable\nSource: platform=adf, activity type=SetVariable"
     variableType: "PIPELINE_INNER"
     variableName: "run_date"
     value:
@@ -54,7 +54,7 @@ spec:
     outputVariables: []
   - name: "User_post_dwell_time"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_dwell_time/User_post_dwell_time.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -88,7 +88,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "User_post_interaction"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/User_post_interaction/User_post_interaction.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -122,7 +122,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Post_geolocation_indexing"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_geolocation_indexing/Post_geolocation_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -156,7 +156,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Post_follower_indexing"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_follower_indexing/Post_follower_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -190,7 +190,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "media_item_indexing"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/media_item_indexing/media_item_indexing.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -224,7 +224,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Post_content"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_content/Post_content.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -258,7 +258,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Post_embedding"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Post_embedding/Post_embedding.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -292,7 +292,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Concatenate_bottom_features"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Concatenate_bottom_features/Concatenate_bottom_features.ipynb"
     kernelType: "emr_serverless_spark_python"
@@ -329,7 +329,7 @@ spec:
       minRetryIntervalSeconds: 0
   - name: "Process_two_tower_data"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_recommender_data_update/activities/Process_two_tower_data/Process_two_tower_data.ipynb"
     kernelType: "emr_serverless_spark_python"

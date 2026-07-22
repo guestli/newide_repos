@@ -12,7 +12,7 @@ spec:
   activities:
   - name: "init_tables"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_store_recommender_v2_mmc_init_tables/activities/init_tables/init_tables.ipynb"
     kernelType: "emr_serverless_spark_python"

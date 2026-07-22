@@ -12,7 +12,7 @@ spec:
   activities:
   - name: "Content_recommendation_to_SQS"
     type: "notebook"
-    description: "A new Notebook job"
+    description: "A new Notebook job\nSource: platform=adf, activity type=DatabricksNotebook"
     source: "WORKSPACE"
     path: "/Workspace/newide_repos/pl_dmp_oneapp_community_content_sqs/activities/Content_recommendation_to_SQS/Content_recommendation_to_SQS.ipynb"
     kernelType: "emr_serverless_spark_python"

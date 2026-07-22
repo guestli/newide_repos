@@ -15,6 +15,7 @@ spec:
   activities:
   - name: "Extraction"
     type: "execute_pipeline"
+    description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_data_update"
     pipelineId: "pl_dmp_oneapp_community_recommender_data_update"
     projectId: "11026"
@@ -31,6 +32,7 @@ spec:
         - "succeeded"
   - name: "Retrieval"
     type: "execute_pipeline"
+    description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_retrieval"
     pipelineId: "pl_dmp_oneapp_community_recommender_retrieval"
     projectId: "11026"
@@ -51,6 +53,7 @@ spec:
         - "succeeded"
   - name: "Ranking"
     type: "execute_pipeline"
+    description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_recommender_ranking_parallel"
     pipelineId: "pl_dmp_oneapp_community_recommender_ranking_parallel"
     projectId: "11026"
@@ -71,7 +74,7 @@ spec:
         - "succeeded"
   - name: "Set_run_date"
     type: "set_variable"
-    description: "Set a pipeline variable"
+    description: "Set a pipeline variable\nSource: platform=adf, activity type=SetVariable"
     variableType: "PIPELINE_INNER"
     variableName: "run_date"
     value:
@@ -79,6 +82,7 @@ spec:
     outputVariables: []
   - name: "Content_to_SQS"
     type: "execute_pipeline"
+    description: "Source: platform=adf, activity type=ExecutePipeline"
     pipelineName: "pl_dmp_oneapp_community_content_sqs"
     pipelineId: "pl_dmp_oneapp_community_content_sqs"
     projectId: "11026"
