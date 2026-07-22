@@ -8,6 +8,7 @@ spec:
   runAs: "Account/2100052957"
   trigger:
     type: "MANUAL"
+    frequency: "daily"
   activities:
   - name: "Set_run_date"
     type: "set_variable"
@@ -41,7 +42,21 @@ spec:
           imageUrl: "image-repo-cn-beijing.cr.volces.com/emr-serverless-spark/spark:3.5.1-py3.12-ubuntu20.04-802"
         cpuCores: 1
         memoryMb: 4096
-      parameters: []
+      parameters:
+      - name: "num_shards"
+        default: ""
+      - name: "table_config_path"
+        default: ""
+      - name: "infer_config_path"
+        default: ""
+      - name: "shard_id"
+        default: ""
+      - name: "model_config_path"
+        default: ""
+      - name: "shard_id_base"
+        default: ""
+      - name: "run_date"
+        default: ""
       resources: []
       position:
         x: -110
@@ -55,7 +70,7 @@ spec:
         num_shards: "{{pipeline.params.parallel_shard_count}}"
         table_config_path: "{{pipeline.params.table_config_path}}"
         infer_config_path: "{{pipeline.params.infer_config_path}}"
-        shard_id: "{{item}}"
+        shard_id: "{{items.each}}"
         model_config_path: "{{pipeline.params.model_config_path}}"
         shard_id_base: "{{pipeline.params.parallel_shard_id_base}}"
         run_date: "{{pipeline.vars.run_date}}"

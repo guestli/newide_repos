@@ -8,6 +8,7 @@ spec:
   runAs: "Account/2100052957"
   trigger:
     type: "MANUAL"
+    frequency: "daily"
   activities:
   - name: "User_post_attributes"
     type: "notebook"
