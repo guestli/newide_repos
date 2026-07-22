@@ -19,7 +19,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -57,7 +61,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -87,7 +95,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -117,7 +129,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -147,7 +163,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -177,7 +197,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -207,7 +231,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -237,7 +265,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -267,7 +299,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
@@ -300,7 +336,11 @@ spec:
     engineQueue: "公共队列-Default"
     computingResourceGroupName: "public_compute"
     computingResourceGroupId: 1010
-    sparkConf: []
+    sparkConf:
+    - key: "serverless.spark.access.key"
+      value: "{{ak}}"
+    - key: "serverless.spark.secret.key"
+      value: "{{sk}}"
     executeParam:
       image:
         imageUrl: "dataleap-cn-beijing.cr.volces.com/studio/notebook_runtime:python-3-12"
